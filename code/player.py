@@ -17,7 +17,7 @@ class Player(Sprite):
         self.game = game
         self.x = x*TILE_SIZE
         self.y = y*TILE_SIZE
-        self.rect = self.image.get_rect(center=(self.x, self.y))
+        self.rect = self.image.get_rect()
         
 
     def move(self):

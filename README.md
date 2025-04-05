@@ -20,14 +20,14 @@
 ## Sprites
 
 - [ ] Image uploading
-- [ ] Making Lili roll
+- [x] Making Lili roll
 - [ ] Lili random movement
 
 ## Movement
 
 - [ ] Main character movement
 - [ ] Camera tracking
-- [ ] Collisions
+- [x] Collisions
 - [ ] Floor movement
 
 ## Health Bar
