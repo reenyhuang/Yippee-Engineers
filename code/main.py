@@ -4,12 +4,10 @@ from wall import Wall, Elevator
 from sprite import sprites, Sprite
 from input import keys_down
 from player import Player
+from healthBar import HealthBar
 import pygame
 from os import path
-
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 600
-
+from random import randint
 BG_COLOR = (222, 235, 255)
 
 
@@ -30,8 +28,11 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         self.elevators = pygame.sprite.Group()
+        self.elev_timer = 0
         self.player = None
         self.lili = None
+        self.healthbar = HealthBar(390, 650, 500, 40, 100)
+
     
     def new(self):
         self.maps = [Map("floorG.txt"), Map("floor1.txt"), Map("floor2.txt")]
@@ -56,15 +57,17 @@ class Game:
             self.events() ## Handle events
             self.draw() ## Draw the background map
             self.update() ## Draw all sprites and update them
-            
+            self.healthbar.hp = 70
             
             pygame.display.flip() ## Update screen
             
     
     def draw(self):
         self.draw_map()
+        
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
+        self.healthbar.draw(self.screen)
 
     def update(self):
         self.player.update()
@@ -81,9 +84,10 @@ class Game:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
             elif event.type == pygame.KEYUP:
-                keys_down.remove(event.key)
+                if event.key in keys_down:
+                    keys_down.remove(event.key)
             
-
+    
     def draw_map(self):
         self.screen.fill(BG_COLOR)
         #self.curr_map.draw(self.screen)
@@ -105,6 +109,10 @@ class Game:
                 elif tile_type == 'E':
                     Elevator(self, col, row)
                     spawn_x, spawn_y = col, row
+        ## If floor one
+        if randint(0, 1):
+            self.lili = Player("RoundLili.png", 8, 10, self)
+
         return spawn_x, spawn_y
 
 
@@ -113,7 +121,6 @@ class Game:
         pygame.quit()
         exit()
     
-
 
 
 

@@ -1,14 +1,12 @@
 import pygame
 import random
 from sprite import Sprite
-from input import is_key_pressed
+from input import is_key_pressed, keys_down
 from os import path
 from settings import TILE_SIZE
 from map import Camera
 movement_speed = 5
 rotation_speed = 3
-
-
 
 class Player(Sprite):
     def __init__(self, image, x, y, game):
@@ -19,7 +17,6 @@ class Player(Sprite):
         self.x = x*TILE_SIZE
         self.y = y*TILE_SIZE
         self.rect = self.image.get_rect()
-        self.elev_timer = 0
         self.direction_timer = 0
         self.dx = 0
         self.dy = 0
@@ -40,7 +37,6 @@ class Player(Sprite):
         self.x += round(self.dx * movement_speed * .5)
         self.y += round(self.dy * movement_speed * .5)
         self.roll(self.dx, self.dy)
-        
         
     def move(self):
         forward_pressed = is_key_pressed(pygame.K_UP) or is_key_pressed(pygame.K_w)
@@ -72,19 +68,21 @@ class Player(Sprite):
 
     def take_elevator(self):
         now = pygame.time.get_ticks()
-        if now - self.elev_timer > 2000:
-            if is_key_pressed(pygame.K_e):
-                elevator = pygame.sprite.spritecollideany(self, self.game.elevators)
-                if elevator:
-                    current_floor = self.game.maps.index(self.game.curr_map)
-                    self.game.change_floor((current_floor + 1) % len(self.game.maps))
-                    self.elev_timer = now
-            elif is_key_pressed(pygame.K_r):
-                elevator = pygame.sprite.spritecollideany(self, self.game.elevators)
-                if elevator:
-                    current_floor = self.game.maps.index(self.game.curr_map)
-                    self.game.change_floor((current_floor - 1) % len(self.game.maps))
-                    self.elev_timer = now
+        if now - self.game.elev_timer > 1000:
+            elevator = pygame.sprite.spritecollideany(self, self.game.elevators)
+            if elevator:
+                current_floor = self.game.maps.index(self.game.curr_map)
+
+                if pygame.K_e in keys_down:
+                    self.game.elev_timer = now
+                    self.game.change_floor(current_floor + 1)
+                    keys_down.remove(pygame.K_e)
+                    
+                elif pygame.K_q in keys_down:
+                    self.game.elev_timer = now
+                    self.game.change_floor(current_floor - 1)
+                    keys_down.remove(pygame.K_q)
+                    
 
     def update(self):
         self.move()

@@ -1,6 +1,7 @@
 import pygame
 from sprite import Sprite
 from settings import TILE_SIZE
+from os import path
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -20,8 +21,13 @@ class Elevator(pygame.sprite.Sprite):
         self.groups = game.all_sprites, game.elevators
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
-        self.image.fill((212, 252, 213))
+        folder = path.dirname(__file__)
+        image = path.join(folder, image)
+        if image in loaded:
+            self.image = loaded[image]
+        else:
+            self.image = pygame.image.load(image).convert_alpha()
+            loaded[image] = self.image
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y

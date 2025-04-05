@@ -15,7 +15,6 @@
 ## Map
 
 - [ ] Tile map for each floor of LEEP
-  - [ ] Use Tiled for creating maps?
 - [ ] Miscellaneous map stuff
 
 ## Sprites
@@ -26,14 +25,15 @@
 
 ## Movement
 
-- [ ] Main character movement
+- [x] Main character movement
 - [x] Camera tracking
 - [x] Collisions
-- [ ] Floor movement
+- [x] Floor movement
 
 ## Health Bar
 
-- [ ] Have a health bar
+- [x] Have a health bar
+- [ ] +/- based on time at engineering, events/tasks
 
 ## Inventory
 
