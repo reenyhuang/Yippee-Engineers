@@ -3,7 +3,7 @@
 ## Artwork
 
 - [x] Round Lili
-- [ ] Tiles: 32 pixel squares on one png file, need to know margin and separation size
+- [ ] Tiles: 32 pixel squares
 - [ ] Stick People
   - [ ] 4 NPCs to interact with
   - [ ] Main Player
@@ -15,7 +15,7 @@
 ## Map
 
 - [ ] Tile map for each floor of LEEP
-  - [ ] Use Tiled for creating maps
+  - [ ] Use Tiled for creating maps?
 - [ ] Miscellaneous map stuff
 
 ## Sprites
