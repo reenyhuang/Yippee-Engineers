@@ -11,7 +11,7 @@ rotation_speed = 1
 
 class Player(Sprite):
     def __init__(self, image, x, y, game):
-        super().__init__(image, x, y)
+        super().__init__(image, x, y, game.all_sprites)
         self.original_image = self.image
         self.angle = 0
         self.game = game

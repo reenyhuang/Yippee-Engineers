@@ -1,10 +1,11 @@
 from settings import *
-from map import Map
+from map import Map, Camera
 from wall import Wall
 from sprite import sprites, Sprite
 from input import keys_down
 from player import Player
 import pygame
+from os import path
 
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
@@ -24,37 +25,44 @@ class Game:
         pygame.display.set_caption("Yippee Enginneer")
         self.clock = pygame.time.Clock()
         self.running = True
-        self.map = Map("tilemap.txt")
+        self.map = None
+        self.camera = None
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
-        for row, tile in enumerate(self.map.map_data):
-            for col, tile_type in enumerate(tile):
-                if tile_type == '1':
-                    Wall(self, row, col)
-        
-        
+        self.player = None
     
     def new(self):
+        self.map = Map("tilemap.txt")
+        self.camera = Camera(self.map.width, self.map.height)
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
-        self.player = Player("RoundLili.png", 0, 0, self)
-        for x in range(10, 20):
-            Wall(self, x, 5)
+        
+        for row, tiles in enumerate(self.map.map_data):
+            for col, tile_type in enumerate(tiles):
+                if tile_type == '1':
+                    Wall(self, col, row)
+                elif tile_type == 'P':
+                    self.player = Player("RoundLili.png", col, row, self)
+
 
     def run(self):
         while self.running:
             self.events() ## Handle events
-            self.draw_map() ## Draw the background map
+            self.draw() ## Draw the background map
             self.update() ## Draw all sprites and update them
+            
             
             pygame.display.flip() ## Update screen
             
     
+    def draw(self):
+        self.draw_map()
+        for sprite in self.all_sprites:
+            self.screen.blit(sprite.image, self.camera.apply(sprite))
+
     def update(self):
-        self.player.update()
-        self.all_sprites.draw(self.screen) ## Draw all sprites
-        for sprite in sprites: ## Also draw all sprites? I think we're keeping track of some sprites in two different places
-            sprite.draw(self.screen)
+        self.player.update()        
+        self.camera.update(self.player)
 
     def events(self): ## Key press events
         for event in pygame.event.get():

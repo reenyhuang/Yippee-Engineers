@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from os import path
+from wall import Wall
 
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
@@ -26,8 +27,6 @@ class Map:
         self.tile_height = len(self.map_data)
         self.width = self.tile_width * TILE_SIZE
         self.height = self.tile_height * TILE_SIZE
-        
-        
 
     def draw(self, screen):
         # Draw the grid
@@ -36,9 +35,6 @@ class Map:
         for y in range(0, WINDOW_HEIGHT, TILE_SIZE):
             pygame.draw.line(screen, GRID_COLOR, (0, y), (WINDOW_WIDTH, y))
         
-
-
-
 
 class Camera:
     def __init__(self, width, height):

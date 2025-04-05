@@ -3,8 +3,9 @@ from os import path
 sprites = []
 loaded = {}
 
-class Sprite:
-    def __init__(self, image, x, y):
+class Sprite(pygame.sprite.Sprite):
+    def __init__(self, image, x, y, *groups):
+        super().__init__(*groups)
         folder = path.dirname(__file__)
         image = path.join(folder, image)
         if image in loaded:
@@ -14,11 +15,11 @@ class Sprite:
             loaded[image] = self.image
         self.x = x
         self.y = y
-        sprites.append(self)
+        
         self.image = pygame.transform.scale(self.image, (self.image.get_width() * 0.05, self.image.get_height() * 0.05))
 
-    def delete(self):
-        sprites.remove(self)
+    #def delete(self):
+    #    sprites.remove(self)
 
     def draw(self, screen):
         screen.blit(self.image, (self.x, self.y))
