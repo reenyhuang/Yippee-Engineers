@@ -25,19 +25,21 @@ class Game:
         pygame.display.set_caption("Yippee Enginneer")
         self.clock = pygame.time.Clock()
         self.running = True
-        self.map = None
+        self.maps = []
+        self.curr_map = None
         self.camera = None
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         self.player = None
     
     def new(self):
-        self.map = Map("tilemap.txt")
-        self.camera = Camera(self.map.width, self.map.height)
+        self.maps = [Map("floorG.txt"), Map("floor1.txt"), Map("floor2.txt")]
+        self.curr_map = self.maps[0]
+        self.camera = Camera(self.curr_map.width, self.curr_map.height)
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         
-        for row, tiles in enumerate(self.map.map_data):
+        for row, tiles in enumerate(self.curr_map.map_data):
             for col, tile_type in enumerate(tiles):
                 if tile_type == '1':
                     Wall(self, col, row)
@@ -78,7 +80,7 @@ class Game:
 
     def draw_map(self):
         self.screen.fill(BG_COLOR)
-        self.map.draw(self.screen)
+        self.curr_map.draw(self.screen)
     
     def quit(self):
         pygame.quit()
