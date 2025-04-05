@@ -12,18 +12,17 @@ WINDOW_HEIGHT = 600
 
 BG_COLOR = (222, 235, 255)
 
-forward_keys = (pygame.K_UP, pygame.K_w)
-backward_keys = (pygame.K_DOWN, pygame.K_s)
-left_keys = (pygame.K_LEFT, pygame.K_a)
-right_keys = (pygame.K_RIGHT, pygame.K_d)
+
 
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.key.set_repeat(500, 100)
+        pygame.key.set_repeat(1000, 100)
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption("Yippee Enginneer")
         self.clock = pygame.time.Clock()
+        self.clock.tick(60)
+        
         self.running = True
         self.maps = []
         self.curr_map = None
@@ -32,6 +31,7 @@ class Game:
         self.walls = pygame.sprite.Group()
         self.elevators = pygame.sprite.Group()
         self.player = None
+        self.lili = None
     
     def new(self):
         self.maps = [Map("floorG.txt"), Map("floor1.txt"), Map("floor2.txt")]
@@ -39,6 +39,7 @@ class Game:
         self.camera = Camera(self.curr_map.width, self.curr_map.height)
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.lili = Player("RoundLili.png", 8, 10, self)
         
         for row, tiles in enumerate(self.curr_map.map_data):
             for col, tile_type in enumerate(tiles):
@@ -68,6 +69,8 @@ class Game:
     def update(self):
         self.player.update()
         self.camera.update(self.player)
+        self.lili.randomMov()
+        self.clock.tick(80)
 
     def events(self): ## Key press events
         for event in pygame.event.get():
@@ -83,7 +86,7 @@ class Game:
 
     def draw_map(self):
         self.screen.fill(BG_COLOR)
-        self.curr_map.draw(self.screen)
+        #self.curr_map.draw(self.screen)
     
     def change_floor(self, floor=1):
         self.curr_map = self.maps[floor % len(self.maps)]

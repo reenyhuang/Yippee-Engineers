@@ -22,12 +22,12 @@
 
 - [ ] Image uploading
 - [x] Making Lili roll
-- [ ] Lili random movement
+- [x] Lili random movement
 
 ## Movement
 
 - [ ] Main character movement
-- [ ] Camera tracking
+- [x] Camera tracking
 - [x] Collisions
 - [ ] Floor movement
 
