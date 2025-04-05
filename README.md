@@ -49,6 +49,7 @@
 
 ## Events/Tasks
 
+- [x] Clock
 - [ ] Get haunted by a professor
 - [ ] Tests
 - [ ] Power outage
