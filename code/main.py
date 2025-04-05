@@ -1,5 +1,6 @@
 from settings import *
-from map import Map, Wall
+from map import Map
+from wall import Wall
 from sprite import sprites, Sprite
 from input import keys_down
 from player import Player

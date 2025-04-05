@@ -36,20 +36,8 @@ class Map:
         for y in range(0, WINDOW_HEIGHT, TILE_SIZE):
             pygame.draw.line(screen, GRID_COLOR, (0, y), (WINDOW_WIDTH, y))
         
-        # Draw a wall
 
-class Wall(pygame.sprite.Sprite):
-    def __init__(self, game, x, y):
-        self.groups = game.all_sprites, game.walls
-        pygame.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
-        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
-        self.image.fill((255, 204, 246))
-        self.rect = self.image.get_rect()
-        self.x = x
-        self.y = y
-        self.rect.x = x * TILE_SIZE
-        self.rect.y = y * TILE_SIZE
+
 
 
 class Camera:
