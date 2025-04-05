@@ -22,7 +22,7 @@ class Map:
         filename = path.join(folder, filename)
         with open(filename, 'r') as f:
             for line in f:
-                self.map_data.append(line)
+                self.map_data.append(line.strip())
         self.tile_width = len(self.map_data[0])
         self.tile_height = len(self.map_data)
         self.width = self.tile_width * TILE_SIZE
@@ -48,4 +48,8 @@ class Camera:
     def update(self, target):
         x = -target.rect.x + int(WINDOW_WIDTH/2)
         y = -target.rect.y + int(WINDOW_HEIGHT/2)
+        x = min(0, x)
+        x = max(-(self.width - WINDOW_WIDTH), x)
+        y = min(0, y)
+        y = max(-(self.height - WINDOW_HEIGHT), y)
         self.camera = pygame.Rect(x, y, self.width, self.height)

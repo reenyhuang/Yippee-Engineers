@@ -61,7 +61,7 @@ class Game:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
 
     def update(self):
-        self.player.update()        
+        self.player.update()
         self.camera.update(self.player)
 
     def events(self): ## Key press events
