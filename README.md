@@ -45,6 +45,7 @@
 - [ ] Title screen with game info
 - [ ] Customizable settings page
 - [ ] Game end screen (only for losing, make it literally impossible to win?)
+- [ ] Help screen
 
 ## Events/Tasks
 
