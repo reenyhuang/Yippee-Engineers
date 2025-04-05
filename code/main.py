@@ -5,6 +5,7 @@ from sprite import sprites, Sprite
 from input import keys_down
 from player import Player
 from healthBar import HealthBar
+from inventory import Inventory
 import pygame
 from os import path
 from random import randint
@@ -37,6 +38,9 @@ class Game:
         self.player = None
         self.lili = None
         self.healthbar = HealthBar(390, 650, 500, 40, 100)
+        #self.inv = Inventory()
+        self.custom_event = True
+
 
     def get_time(self):
         '''Elapsed time in seconds.'''
@@ -71,6 +75,12 @@ class Game:
 
     def run(self):
         while self.running:
+            
+            if self.get_clock_time() == "1:00" and self.custom_event:
+                pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: randint(0, 5)}))
+                self.custom_event = False
+            if self.get_clock_time() == "2:00":
+                self.custom_event = True
             self.events() ## Handle events
             self.draw() ## Draw the background map
             self.update() ## Draw all sprites and update them
@@ -85,7 +95,10 @@ class Game:
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
         self.healthbar.draw(self.screen)
+        #self.inventory.render(self.screen)
 
+    def inventory(self):
+        pass
 
     def update(self):
         self.player.update()
@@ -105,6 +118,20 @@ class Game:
             elif event.type == pygame.KEYUP:
                 if event.key in keys_down:
                     keys_down.remove(event.key)
+            elif event.type == pygame.USEREVENT:
+                event_id = event.dict[id]
+                if event_id == 0:
+                    pass ## Random events
+                elif event_id == 1:
+                    pass
+                elif event_id == 2:
+                    pass
+                elif event_id == 3:
+                    pass
+                elif event_id == 4:
+                    pass
+                elif event_id == 5:
+                    pass
             
     
     def draw_map(self):
