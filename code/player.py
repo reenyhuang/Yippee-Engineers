@@ -3,7 +3,7 @@ from sprite import Sprite
 from input import is_key_pressed
 from os import path
 from settings import TILE_SIZE
-
+from map import Camera
 movement_speed = .5
 rotation_speed = 1
 
@@ -51,7 +51,12 @@ class Player(Sprite):
         self.image = pygame.transform.rotate(self.original_image, self.angle)
         
 
-        
+    def take_elevator(self):
+        if is_key_pressed(pygame.K_e):
+            elevator = pygame.sprite.spritecollideany(self, self.game.elevators)
+            if elevator:
+                self.game.change_map
+
 
     def update(self):
         self.move()

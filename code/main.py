@@ -1,6 +1,6 @@
 from settings import *
 from map import Map, Camera
-from wall import Wall
+from wall import Wall, Elevator
 from sprite import sprites, Sprite
 from input import keys_down
 from player import Player
@@ -30,6 +30,7 @@ class Game:
         self.camera = None
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.elevators = pygame.sprite.Group()
         self.player = None
     
     def new(self):
@@ -45,6 +46,8 @@ class Game:
                     Wall(self, col, row)
                 elif tile_type == 'P':
                     self.player = Player("RoundLili.png", col, row, self)
+                elif tile_type == 'E':
+                    Elevator(self, col, row)
 
 
     def run(self):
@@ -82,6 +85,27 @@ class Game:
         self.screen.fill(BG_COLOR)
         self.curr_map.draw(self.screen)
     
+    def change_floor(self, floor=1):
+        self.curr_map = self.maps[floor % len(self.maps)]
+        self.camera = Camera(self.curr_map.width, self.curr_map.height)
+        self.all_sprites.empty()
+        self.walls.empty()
+        self.elevators.empty()
+        spawn_x, spawn_y = self.load_map()
+        self.player = Player("RoundLili.png", spawn_x, spawn_y, self)
+
+    def load_map(self):
+        for row, tiles in enumerate(self.curr_map.map_data):
+            for col, tile_type in enumerate(tiles):
+                if tile_type == '1':
+                    Wall(self, col, row)
+                elif tile_type == 'E':
+                    Elevator(self, col, row)
+                    spawn_x, spawn_y = col, row
+        return spawn_x, spawn_y
+
+
+
     def quit(self):
         pygame.quit()
         exit()

@@ -13,6 +13,7 @@ GRID_COLOR = (155, 158, 163)
 ## . = empty
 ## 1 = wall
 ## P = spawn point
+## E = Elevator
 
 
 class Map:
