@@ -45,7 +45,7 @@ class Player(Sprite):
             self.rect.topleft = (round(self.x), round(self.y))
 
         
-        direction = dx if dx != 0 else dy
+        direction = -dx if dx != 0 else dy
         self.angle += rotation_speed * direction
 
         self.image = pygame.transform.rotate(self.original_image, self.angle)
