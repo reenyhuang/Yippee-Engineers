@@ -9,18 +9,23 @@ import pygame
 from os import path
 from random import randint
 BG_COLOR = (222, 235, 255)
+import time
 
+pygame.font.init()
+font = pygame.font.Font(None, 36)
 
 
 class Game:
     def __init__(self):
         pygame.init()
+        pygame.font.init()
         pygame.key.set_repeat(1000, 100)
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption("Yippee Enginneer")
         self.clock = pygame.time.Clock()
         self.clock.tick(60)
-        
+        self.start_time = time.time()
+        self.curr_time = time.time()
         self.running = True
         self.maps = []
         self.curr_map = None
@@ -33,6 +38,12 @@ class Game:
         self.lili = None
         self.healthbar = HealthBar(390, 650, 500, 40, 100)
 
+    def get_time(self):
+        '''Elapsed time in seconds.'''
+        self.curr_time = time.time()
+        elapsed_time = self.curr_time - self.start_time
+        elapsed_time = int(elapsed_time)
+        return elapsed_time
     
     def new(self):
         self.maps = [Map("floorG.txt"), Map("floor1.txt"), Map("floor2.txt")]
@@ -51,6 +62,12 @@ class Game:
                 elif tile_type == 'E':
                     Elevator(self, col, row)
 
+    def get_clock_time(self):
+        '''Return string of in game time: hours:minutes. 6 hr clock, 1 min = 1 sec.'''
+        elapsed_time = self.get_time()
+        hours = (elapsed_time // 60) % 6
+        minutes = elapsed_time % 60
+        return f"{hours}:{minutes:02d}"
 
     def run(self):
         while self.running:
@@ -58,7 +75,7 @@ class Game:
             self.draw() ## Draw the background map
             self.update() ## Draw all sprites and update them
             self.healthbar.hp = 70
-            
+            self.screen.blit(font.render(self.get_clock_time(), True, (0, 0, 0), (255, 255, 255)), (1200, 10))
             pygame.display.flip() ## Update screen
             
     
@@ -69,11 +86,13 @@ class Game:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
         self.healthbar.draw(self.screen)
 
+
     def update(self):
         self.player.update()
         self.camera.update(self.player)
         self.lili.randomMov()
         self.clock.tick(80)
+        
 
     def events(self): ## Key press events
         for event in pygame.event.get():

@@ -2,6 +2,7 @@ import pygame
 from sprite import Sprite
 from settings import TILE_SIZE
 from os import path
+loaded = {}
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -22,7 +23,8 @@ class Elevator(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         folder = path.dirname(__file__)
-        image = path.join(folder, image)
+        folder = path.dirname(folder)
+        image = path.join(folder, "images", "gray_tile.png")
         if image in loaded:
             self.image = loaded[image]
         else:
