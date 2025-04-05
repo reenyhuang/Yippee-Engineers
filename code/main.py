@@ -61,19 +61,11 @@ class Game:
             if event.type == pygame.QUIT:
                 self.running = False
             elif event.type == pygame.KEYDOWN:
-                
-                if event.key in forward_keys:
-                    self.player.move(dy=-1)
-                elif event.key in backward_keys:
-                    self.player.move(dy=1)
-                elif event.key in left_keys:
-                    self.player.move(dx=-1)
-                elif event.key in right_keys:
-                    self.player.move(dx=1)
-                elif event.key == pygame.K_ESCAPE:
+                keys_down.add(event.key)
+                if event.key == pygame.K_ESCAPE:
                     self.running = False
             elif event.type == pygame.KEYUP:
-                pass
+                keys_down.remove(event.key)
             
 
     def draw_map(self):
