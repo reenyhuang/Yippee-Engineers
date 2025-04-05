@@ -1,11 +1,22 @@
 import pygame
 from pygame.locals import *
-from settings import TILE_SIZE, WINDOW_HEIGHT, WINDOW_WIDTH
+from os import path
+
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
+TILE_SIZE = 32
+
+## Tilemap txt doc format:
+## . = empty
+## 1 = wall
+## P = spawn point
 
 
 class Map:
     def __init__(self, filename):
         self.map_data = []
+        folder = path.dirname(__file__)
+        filename = path.join(folder, filename)
         with open(filename, 'r') as f:
             for line in f:
                 self.map_data.append(line)
@@ -22,3 +33,29 @@ class Map:
         for y in range(0, WINDOW_HEIGHT, TILE_SIZE):
             pygame.draw.line(screen, (0, 255, 0), (0, y), (WINDOW_WIDTH, y))
 
+class Wall(pygame.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.walls
+        self.game = game
+        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
+        self.image.fill((0, 255, 255))
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+
+
+class Camera:
+    def __init__(self, width, height):
+        self.camera = pygame.Rect(0, 0, width, height)
+        self.width = width
+        self.height = height
+    
+    def apply(self, entity):
+        return entity.rect.move(self.camera.topleft)
+    
+    def update(self, target):
+        x = -target.rect.x + int(WINDOW_WIDTH/2)
+        y = -target.rect.y + int(WINDOW_HEIGHT/2)
+        self.camera = pygame.Rect(x, y, self.width, self.height)
