@@ -6,6 +6,8 @@ WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
 TILE_SIZE = 32
 
+GRID_COLOR = (155, 158, 163)
+
 ## Tilemap txt doc format:
 ## . = empty
 ## 1 = wall
@@ -25,20 +27,24 @@ class Map:
         self.width = self.tile_width * TILE_SIZE
         self.height = self.tile_height * TILE_SIZE
         
+        
 
     def draw(self, screen):
         # Draw the grid
         for x in range(0, WINDOW_WIDTH, TILE_SIZE):
-            pygame.draw.line(screen, (255, 0, 0), (x, 0), (x, WINDOW_HEIGHT))
+            pygame.draw.line(screen, GRID_COLOR, (x, 0), (x, WINDOW_HEIGHT))
         for y in range(0, WINDOW_HEIGHT, TILE_SIZE):
-            pygame.draw.line(screen, (0, 255, 0), (0, y), (WINDOW_WIDTH, y))
+            pygame.draw.line(screen, GRID_COLOR, (0, y), (WINDOW_WIDTH, y))
+        
+        # Draw a wall
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.walls
+        pygame.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
-        self.image.fill((0, 255, 255))
+        self.image.fill((255, 204, 246))
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
