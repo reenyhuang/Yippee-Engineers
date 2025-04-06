@@ -19,7 +19,7 @@
 
 ## Sprites
 
-- [ ] Image uploading
+- [x] Image uploading
 - [x] Making Lili roll
 - [x] Lili random movement
 
@@ -50,26 +50,31 @@
 ## Events/Tasks
 
 - [x] Clock
-- [ ] Get haunted by a professor
-- [ ] Tests
-- [ ] Power outage
-- [ ] Starvation/Dehydration
-- [ ] Computer dies
-- [ ] Lose charger
-- [ ] Studying
-- [ ] Hang out with friends
-- [ ] Go outside (balconey)
-- [ ] Internship, Interview, Career Fair
-- [ ] Club meetings
-- [ ] Get coffee
-- [ ] Watch La La Land
+- [ ] Get haunted by a professor *
+- [ ] Tests *
+- [ ] Power outage *
+- [ ] Starvation/Dehydration *
+- [ ] Computer dies *
+- [ ] Lose charger *
+- [ ] Studying *
+- [ ] Hang out with friends *
+- [ ] Go outside (balconey) *
+- [ ] Club meetings (5:30 pm) *
+- [ ] Get coffee *
+- [ ] Watch La La Land*
 - [ ] Snacks
-- [ ] Pet Lili
-- [ ] Mental Health Walk
-- [ ] Go to class
-- [ ] Do homework
-- [ ] Cry
+- [ ] Pet Lili*
+- [ ] Mental Health Walk (first floor walk) *
+- [ ] Go to class (2 times a day for 10 sec/per) *
+- [ ] Do homework *
+- [ ] press key to drink coffee
+- [ ] Cry *
+- [ ] go nap*
 
+Check list
+- if hw due
+- health
+- 
 ## Screencaps
 
 - [ ] Have screencaps for most events

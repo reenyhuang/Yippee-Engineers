@@ -10,10 +10,19 @@ TILE_SIZE = 32
 GRID_COLOR = (155, 158, 163)
 
 ## Tilemap txt doc format:
-## . = empty
+## . = empty/grass
 ## 1 = wall
 ## P = spawn point
 ## E = Elevator
+## B = Couch (bed)
+## C = Carpet
+## T = Tile
+## t = Table
+## c = Chair
+## A = Advisor
+## S = Starbucks
+## Character currently 4 tiles wide
+## Make everything very large
 
 
 class Map:

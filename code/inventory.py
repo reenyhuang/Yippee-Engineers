@@ -10,9 +10,9 @@ class Inventory:
         self.rect.topleft = (0, 160)
 
         self.slots.append(InventorySlot("images/coffee.png", (16, 176)))
-        self.slots.append(InventorySlot("images/computer.png", (16, 192)))
-        self.slots.append(InventorySlot("images/hw.png", (16, 208)))
-        self.slots.append(InventorySlot("images/charger.png", (16, 224)))
+        self.slots.append(InventorySlot("images/computer.png", (16, 257)))
+        self.slots.append(InventorySlot("images/hw.png", (16, 335)))
+        self.slots.append(InventorySlot("images/charger.png", (16, 415)))
         self.slots[1].count += 1
         self.slots[3].count += 1
     

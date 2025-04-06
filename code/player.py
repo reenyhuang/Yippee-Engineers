@@ -6,7 +6,7 @@ from os import path
 from settings import TILE_SIZE
 from map import Camera
 movement_speed = 5
-rotation_speed = 3
+rotation_speed = 4
 
 class Player(Sprite):
     def __init__(self, image, x, y, game):

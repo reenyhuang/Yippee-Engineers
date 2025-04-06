@@ -6,6 +6,7 @@ from input import keys_down
 from player import Player
 from healthBar import HealthBar
 from inventory import Inventory
+from button import Button
 import pygame
 from os import path
 from random import randint
@@ -38,7 +39,7 @@ class Game:
         self.player = None
         self.lili = None
         self.healthbar = HealthBar(390, 650, 500, 40, 100)
-        #self.inv = Inventory()
+        self.inv = Inventory()
         self.custom_event = True
 
 
@@ -81,10 +82,14 @@ class Game:
                 self.custom_event = False
             if self.get_clock_time() == "2:00":
                 self.custom_event = True
-            self.events() ## Handle events
+            if self.get_clock_time() == "0:00" and self.custom_event:
+                self.inv.slots[2].count += 2
+                self.custom_event = False
+            if self.get_clock_time() == "0:01":
+                self.custom_event = True
+            self.events(self.healthbar) ## Handle events
             self.draw() ## Draw the background map
             self.update() ## Draw all sprites and update them
-            self.healthbar.hp = 70
             self.screen.blit(font.render(self.get_clock_time(), True, (0, 0, 0), (255, 255, 255)), (1200, 10))
             pygame.display.flip() ## Update screen
             
@@ -95,7 +100,7 @@ class Game:
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
         self.healthbar.draw(self.screen)
-        #self.inventory.render(self.screen)
+        self.inv.render(self.screen)
 
     def inventory(self):
         pass
@@ -106,8 +111,7 @@ class Game:
         self.lili.randomMov()
         self.clock.tick(80)
         
-
-    def events(self): ## Key press events
+    def events(self, hb): ## Key press events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -120,18 +124,47 @@ class Game:
                     keys_down.remove(event.key)
             elif event.type == pygame.USEREVENT:
                 event_id = event.dict[id]
-                if event_id == 0:
-                    pass ## Random events
-                elif event_id == 1:
-                    pass
-                elif event_id == 2:
-                    pass
-                elif event_id == 3:
-                    pass
-                elif event_id == 4:
-                    pass
-                elif event_id == 5:
-                    pass
+                if event_id == 0: # haunted by professor
+                    hb.decrease(hb.hp*.2)
+                elif event_id == 1: # power outage
+                    hb.increase(hb.hp*.1)
+                elif event_id == 2: # lose charger
+                    hb.decrease(hb.hp*.5)
+                elif event_id == 3: # cry
+                    hb.decrease(hb.hp*.2)
+                elif event_id == 4: #computer dies
+                    hb.decrease(hb.hp*.6)
+                elif event_id == 5: #have a test
+                    hb.decrease(hb.hp*.3)
+                elif event_id == 6: #starvation/dehydation
+                    hb.decrease(hb.hp*.1)
+                elif event_id == 7: #study (less than 3 hrs)
+                    hb.increase(hb.hp*.2)
+                elif event_id == 8: #study more than 3 hrs
+                    hb.decrease(hb.hp*.4)
+                elif event_id == 9: #drink coffee
+                    hb.increase(hb.hp*.2)
+                elif event_id == 10: #hang with friends
+                    hb.increase(hb.hp*.5)
+                elif event_id == 11: #sleep in esc office
+                    if randint(0, 9):
+                        hb.increase(hb.hp*.3)
+                    else:
+                        hb.decrease(hb.hp*.6)
+                elif event_id == 12: #go to balcony
+                    hb.increase(hb.hp*.1)
+                elif event_id == 13: #go to club meeeting
+                    hb.increase(hb.hp*.05)
+                elif event_id == 14: #watch la la land
+                    hb.increase(hb.hp*.3)
+                elif event_id == 15: #pet lili
+                    hb.increase(hb.hp*.6)
+                elif event_id == 16: #mental health walk
+                    hb.increase(hb.hp*.3)
+                elif event_id == 17: #go to class
+                    hb.decrease(hb.hp*.2)
+                elif event_id == 18: #do hw
+                    hb.decrease(hb.hp*.1)
             
     
     def draw_map(self):
@@ -155,19 +188,19 @@ class Game:
                 elif tile_type == 'E':
                     Elevator(self, col, row)
                     spawn_x, spawn_y = col, row
-        ## If floor one
+        ## Put Lili on random floors
         if randint(0, 1):
             self.lili = Player("RoundLili.png", 8, 10, self)
 
         return spawn_x, spawn_y
 
-
-
     def quit(self):
         pygame.quit()
         exit()
     
-
+    def menu():
+        mouse = pygame.mouse.get_pos()
+        text = 
 
 
 if __name__ == '__main__':
