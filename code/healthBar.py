@@ -18,7 +18,11 @@ class HealthBar():
     def decrease(self, num):
         if (self.hp-num) >= 0:
             self.hp -= num
+        else:
+            self.hp = 0
 
     def increase(self, num):
         if (self.hp+num) <= self.max_hp:
             self.hp += num
+        else:
+            self.hp = 100

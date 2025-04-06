@@ -310,12 +310,12 @@ class Advisor(pygame.sprite.Sprite):
         else:
             self.image = pygame.image.load(image).convert_alpha()
             loaded[image] = self.image
-        self.image = pygame.transform.scale(self.image, (self.image.get_width(), self.image.get_height()))
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() *.8, self.image.get_height()))
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
-        self.rect.x = x * TILE_SIZE -25
-        self.rect.y = y * TILE_SIZE -20
+        self.rect.x = x * TILE_SIZE -48
+        self.rect.y = y * TILE_SIZE -64
 
 
 class Coffee(pygame.sprite.Sprite):

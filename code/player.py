@@ -17,26 +17,11 @@ class Player(Sprite):
         self.x = x*TILE_SIZE
         self.y = y*TILE_SIZE
         self.rect = self.image.get_rect()
-        self.direction_timer = 0
+        
         self.dx = 0
         self.dy = 0
         
-    def randomMov(self):
-        if self.direction_timer <= 0:
-            self.dx, self.dy = random.choice([-1, 0, 0, 0, 0 ,1]), random.choice([-1, 0, 0, 0, 0 ,1])
-            self.direction_timer = random.randint(40,80)
-        else:
-            self.direction_timer -= 1
-        
-        future_rect = self.rect.copy()
-        future_rect.topleft = (round(self.x + self.dx), round(self.y + self.dy))
-        if not any(future_rect.colliderect(wall.rect) for wall in self.game.walls):
-            self.x += self.dx
-            self.y += self.dy
-            self.rect.topleft = (round(self.x), round(self.y))
-        self.x += round(self.dx * movement_speed * .5)
-        self.y += round(self.dy * movement_speed * .5)
-        self.roll(self.dx, self.dy)
+    
         
     def move(self):
         forward_pressed = is_key_pressed(pygame.K_UP) or is_key_pressed(pygame.K_w)
@@ -61,10 +46,7 @@ class Player(Sprite):
             self.y += dy
             self.rect.topleft = (round(self.x), round(self.y))
 
-    def roll(self, dx, dy):
-        direction = -dx if dx != 0 else dy
-        self.angle += rotation_speed * direction
-        self.image = pygame.transform.rotate(self.original_image, self.angle)
+    
 
     def take_elevator(self):
         now = pygame.time.get_ticks()
@@ -175,7 +157,7 @@ class Player(Sprite):
     
     def drink_coffee(self):
         now = pygame.time.get_ticks()
-        if (now - self.game.coffee1_timer > 18000) and (pygame.K_SPACE in keys_down) and (self.game.inv.slots[0].count > 0):
+        if (now - self.game.coffee1_timer > 6000) and (pygame.K_SPACE in keys_down) and (self.game.inv.slots[0].count > 0):
             self.game.coffee_timer = now
             self.game.inv.slots[0].count -= 1
             pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 9}))
@@ -204,12 +186,20 @@ class Player(Sprite):
     def get_food(self):
         now = pygame.time.get_ticks()
         if now - self.game.food_timer > 3000:
-            food = pygame.sprite.spritecollideany(self, self.game.food)
+            food = pygame.sprite.spritecollideany(self, self.game.vending)
             if food:
-                if pygame.K_e in keys_down:
+                if pygame.K_v in keys_down:
                     self.game.food_timer = now
                     self.game.inv.slots[4].count += 1
-                    keys_down.remove(pygame.K_e)
+                    keys_down.remove(pygame.K_v)
+    
+    def eat(self):
+        now = pygame.time.get_ticks()
+        if (now - self.game.piz_timer > 3000) and (pygame.K_n in keys_down) and (self.game.inv.slots[4].count > 0):
+            self.game.piz_timer = now
+            self.game.inv.slots[4].count -= 1
+            pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 19}))
+            keys_down.remove(pygame.K_n)  
                     
 
     def update(self):
@@ -227,7 +217,43 @@ class Player(Sprite):
         self.drink_coffee()
         self.sleepy()
         self.club()
+        self.get_food()
+        self.eat()
 
 
 
+class Lili(Sprite):
+    def __init__(self, image, x, y, game):
+        self.groups = (game.all_sprites, game.pet)
+        super().__init__(image, x, y, self.groups)
+        self.original_image = self.image
+        self.angle = 0
+        self.game = game
+        self.x = x*TILE_SIZE
+        self.y = y*TILE_SIZE
+        self.rect = self.image.get_rect()
+        self.direction_timer = 0
+    
+    def randomMov(self):
+        if self.direction_timer <= 0:
+            self.dx, self.dy = random.choice([-1, 0, 0, 0, 0 ,1]), random.choice([-1, 0, 0, 0, 0 ,1])
+            self.direction_timer = random.randint(40,80)
+        else:
+            self.direction_timer -= 1
+        
+        future_rect = self.rect.copy()
+        future_rect.topleft = (round(self.x + self.dx), round(self.y + self.dy))
+        if not any(future_rect.colliderect(wall.rect) for wall in self.game.walls):
+            self.x += self.dx
+            self.y += self.dy
+            self.rect.topleft = (round(self.x), round(self.y))
+        self.x += round(self.dx * movement_speed * .5)
+        self.y += round(self.dy * movement_speed * .5)
+        self.roll(self.dx, self.dy)
+    
+    def roll(self, dx, dy):
+        direction = -dx if dx != 0 else dy
+        self.angle += rotation_speed * direction
+        self.image = pygame.transform.rotate(self.original_image, self.angle)
+    
 

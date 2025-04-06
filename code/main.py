@@ -3,7 +3,7 @@ from map import Map, Camera
 from wall import *
 from sprite import sprites, Sprite
 from input import keys_down
-from player import Player
+from player import Player, Lili
 from healthBar import HealthBar
 from inventory import Inventory
 from button import Button
@@ -49,6 +49,7 @@ class Game:
         self.club = pygame.sprite.Group()
         self.vending = pygame.sprite.Group()
         self.advisor = pygame.sprite.Group()
+        
         self.elev_timer = 0
         self.club_timer = 0
         self.lili_timer = 0
@@ -62,12 +63,16 @@ class Game:
         self.walk_timer = 0
         self.study_timer = 0
         self.sleep_timer = 0
+        self.food_timer = 0
+        self.piz_timer = 0
         
         self.player = None
         self.lili = None
         self.healthbar = HealthBar(390, 650, 500, 40, 100)
         self.inv = Inventory()
         self.custom_event = True
+        self.piz = 0
+        self.edu = 0
 
 
     def get_time(self):
@@ -123,7 +128,7 @@ class Game:
 
                 
         
-        self.lili = Player("RoundLili.png", 12, 12, self)
+        self.lili = Lili("RoundLili.png", 12, 12, self)
         self.player = Player("RoundLili.png", player_location[0], player_location[1], self)
 
     def get_clock_time(self):
@@ -139,10 +144,13 @@ class Game:
         self.running = True
         while self.running:
             #have a beginning scene
-            if self.get_clock_time() == "1:00" and self.custom_event:
+            if (self.get_clock_time() == "1:00" or self.get_clock_time() == "4:00") and self.custom_event:
                 pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: randint(0, 5)}))
                 self.custom_event = False
-            if self.get_clock_time() == "2:00":
+            if (self.get_clock_time() == "2:00" or self.get_clock_time() == "3:00") and self.custom_event:
+                self.alert("Go to Class: G415")
+                self.custom_event = False
+            if self.get_clock_time() == "1:01" or self.get_clock_time() == "4:01":
                 self.custom_event = True
             if self.get_clock_time() == "0:00" and self.custom_event:
                 self.inv.slots[2].count += 2
@@ -169,6 +177,37 @@ class Game:
         pygame.display.update()
         pygame.time.wait(2000)
 
+    def alert(self, msg):
+        popup_width, popup_height = 400, 200
+        popup = pygame.Surface((popup_width, popup_height))
+        popup.fill((240, 240, 240))  # Light gray background
+        popup_rect = popup.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+
+        text = font.render(msg, True, (0, 0, 0))
+        text_rect = text.get_rect(center=(popup_width // 2, 60))
+        popup.blit(text, text_rect)
+
+        button_color = (200, 50, 50)
+        button_rect = pygame.Rect(popup_width // 2 - 50, 130, 100, 40)
+        pygame.draw.rect(popup, button_color, button_rect)
+        button_text = font.render("OK", True, (255, 255, 255))
+        button_text_rect = button_text.get_rect(center=button_rect.center)
+        popup.blit(button_text, button_text_rect)
+
+        self.screen.blit(popup, popup_rect)
+        pygame.display.update()    
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = event.pos
+                    if button_rect.move(popup_rect.left, popup_rect.top).collidepoint(mouse_pos):
+                        waiting = False
+
+
     def draw(self):
         self.draw_map()
         
@@ -176,9 +215,6 @@ class Game:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
         self.healthbar.draw(self.screen)
         self.inv.render(self.screen)
-
-    def inventory(self):
-        pass
 
     def update(self):
         self.player.update()
@@ -200,35 +236,36 @@ class Game:
             elif event.type == pygame.USEREVENT:
                 event_id = event.dict[id]
                 if event_id == 0: # haunted by professor
-                    self.screen_cap("images/angry_professor.png", "Haunted by Professor: -20% HP")
-                    hb.decrease(hb.max_hp*.2)
+                    self.screen_cap("images/angry_professor.png", "Haunted by Professor: -60% HP")
+                    hb.decrease(hb.max_hp*.6)
                 elif event_id == 1: # power outage
-                    self.screen_cap("images/blackout.png", "Power Outage: +10% hp (yayyyyyy)")
+                    self.screen_cap("images/blackout.png", "Power Outage: +10% HP (yayyyyyy)")
                     hb.increase(hb.max_hp*.1)
                 elif event_id == 2: # lose charger
-                    self.screen_cap("images/lose_charger.png", "Oh NOOOO, donde esta?: -50% hp")
+                    self.screen_cap("images/lose_charger.png", "Oh NOOOO, donde esta?: -50% HP")
                     hb.decrease(hb.max_hp*.5)
                 elif event_id == 3: # cry
-                    self.screen_cap("images/crying.png", "DYIIINNGGGGG: -20% hp")
-                    hb.decrease(hb.max_hp*.2)
-                elif event_id == 4: #computer dies
-                    self.screen_cap("images/computer_dies.png", "FCK: -60% max_hp")
-                    hb.decrease(hb.max_hp*.6)
-                elif event_id == 5: #have a test
+                    self.screen_cap("images/crying.png", "DYIIINNGGGGG: -30% HP")
                     hb.decrease(hb.max_hp*.3)
+                elif event_id == 4: #computer dies
+                    self.screen_cap("images/computer_dies.png", "FCK: -40% HP")
+                    hb.decrease(hb.max_hp*.4)
+                elif event_id == 5: #have a test
+                    hb.decrease(hb.max_hp*.5 * min(self.edu, 5))
                 elif event_id == 6: #starvation/dehydation
                     hb.decrease(hb.max_hp*.1)
+                    self.alert("Starving! -10% HP")
                 elif event_id == 7: #study (less than 3 hrs)
-                    hb.increase(hb.max_hp*.2)
+                    hb.increase(hb.max_hp*.05)
                 elif event_id == 8: #study more than 3 hrs
                     hb.decrease(hb.max_hp*.4)
                 elif event_id == 9: #drink coffee
-                    hb.increase(hb.max_hp*.2)
+                    hb.increase(hb.max_hp*.1)
                 elif event_id == 10: #hang with friends
-                    hb.increase(hb.max_hp*.5)
+                    hb.increase(hb.max_hp*.3)
                 elif event_id == 11: #sleep in esc office
                     if randint(0, 9):
-                        hb.increase(hb.max_hp*.3)
+                        hb.increase(hb.max_hp*.2)
                     else:
                         hb.hp = 0
                 elif event_id == 12: #go to balcony
@@ -238,13 +275,17 @@ class Game:
                 elif event_id == 14: #watch la la land
                     hb.increase(hb.max_hp*.3)
                 elif event_id == 15: #pet lili
-                    hb.increase(hb.max_hp*.6)
+                    hb.increase(hb.max_hp*.01)
                 elif event_id == 16: #mental health walk
-                    hb.increase(hb.max_hp*.3)
+                    hb.increase(hb.max_hp*.15)
                 elif event_id == 17: #go to class
-                    hb.decrease(hb.max_hp*.2)
+                    hb.decrease(hb.max_hp*.03)
+                    self.alert("Attending Class for 1 Hour")
+                    pygame.time.wait(10000)
                 elif event_id == 18: #do hw
                     hb.decrease(hb.max_hp*.1)
+                elif event_id == 19: #eat pizza
+                    hb.increase(hb.max_hp*.03)
             
     
     def draw_map(self):
@@ -260,6 +301,7 @@ class Game:
         self.classroom.empty()
         self.friends.empty()
         spawn_x, spawn_y = self.load_map()
+        
         self.player = Player("RoundLili.png", spawn_x, spawn_y, self)
 
     def load_map(self):
@@ -304,7 +346,7 @@ class Game:
                     Advisor(self, col, row)
         ## Put Lili on random floors
         if randint(0, 1):
-            self.lili = Player("RoundLili.png", 8, 10, self)
+            self.lili = Lili("RoundLili.png", 8, 10, self)
 
         return spawn_x, spawn_y
 
@@ -392,6 +434,7 @@ class Game:
 
             pygame.display.update()
         self.running=True
+
 if __name__ == '__main__':
     game = Game()
     game.new()
