@@ -76,7 +76,10 @@ class Game:
         self.edu = 0
         self.exam = False
         self.show_help = False
-        self.helpt = pygame.image.load("images/help_button.png").convert_alpha()
+        folder = path.dirname(__file__)
+        folder = path.dirname(folder)
+        
+        self.helpt = pygame.image.load(path.join(folder, "images", "help_button.png")).convert_alpha()
         self.helpt_imt = pygame.transform.scale(self.helpt, (self.helpt.get_width()*.45, self.helpt.get_height()*.38))
         self.help_button = Button(image=self.helpt_imt, pos=(1200, 650), text_input="Help", font=pygame.font.Font(None, 20), base_color="Black", hovering_color="Red")
 
@@ -202,7 +205,7 @@ class Game:
             if self.get_clock_time() == "0:06":
                 self.custom_event = True
             if self.healthbar.hp <= 0:
-                self.screen_cap("images/jump.png", "You Died :(")
+                self.screen_cap("jump.png", "You Died :(")
                 self.quit()
             self.events(self.healthbar) ## Handle events
             self.draw() ## Draw the background map
@@ -213,6 +216,9 @@ class Game:
             pygame.display.flip() ## Update screen
             
     def screen_cap(self, img, msg, font_size = 48, text_color=(255, 0, 0)):
+        folder = path.dirname(__file__)
+        folder = path.dirname(folder)
+        img = path.join(folder, "images", img)
         img1 = pygame.image.load(img).convert_alpha()
         imgt = pygame.transform.scale(img1, (WINDOW_WIDTH, WINDOW_HEIGHT))
         self.screen.blit(imgt, (0,0))
@@ -317,13 +323,13 @@ class Game:
             elif event.type == pygame.USEREVENT:
                 event_id = event.dict[id]
                 if event_id == 0: # haunted by professor
-                    self.screen_cap("images/angry_professor.png", "Haunted by Professor: -60 HP")
+                    self.screen_cap("angry_professor.png", "Haunted by Professor: -60 HP")
                     hb.decrease(hb.max_hp*.6)
                 elif event_id == 1: # power outage
-                    self.screen_cap("images/blackout.png", "Power Outage: +10 HP (yayyyyyy)")
+                    self.screen_cap("blackout.png", "Power Outage: +10 HP (yayyyyyy)")
                     hb.increase(hb.max_hp*.1)
                 elif event_id == 2: # lose charger
-                    self.screen_cap("images/lose_charger.png", "Oh NOOOO, donde esta?: -50 HP")
+                    self.screen_cap("lose_charger.png", "Oh NOOOO, donde esta?: -50 HP")
                     if self.inv.slots[3].count == 1:
                         self.inv.slots[3].count -= 1
                         hb.decrease(hb.max_hp*.5)
@@ -331,10 +337,10 @@ class Game:
                         self.alert("Your computer died -> no hw done -> U DIE")
                         hb.hp = 0
                 elif event_id == 3: # cry
-                    self.screen_cap("images/crying.png", "DYIIINNGGGGG: -30 HP")
+                    self.screen_cap("crying.png", "DYIIINNGGGGG: -30 HP")
                     hb.decrease(hb.max_hp*.3)
                 elif event_id == 4: #computer dies
-                    self.screen_cap("images/computer_dies.png", "FCK: -40 HP")
+                    self.screen_cap("computer_dies.png", "FCK: -40 HP")
                     hb.decrease(hb.max_hp*.4)
                 elif event_id == 5: #have a test
                     self.alert("Test Time!")
@@ -387,7 +393,7 @@ class Game:
                 elif event_id == 19: #eat pizza
                     hb.increase(hb.max_hp*.03)
                 elif event_id == 20: #drop out and start a cat cafe
-                    self.screen_cap("images/cat_cafe.png", "You dropped out and started a cat cafe, you win!!")
+                    self.screen_cap("cat_cafe.png", "You dropped out and started a cat cafe, you win!!")
                     self.quit()
 
     
@@ -583,11 +589,14 @@ class Game:
             mouse = pygame.mouse.get_pos()
             txt = pygame.font.Font(None, 100).render("Main Menu", True, "#b68f40")
             rect = txt.get_rect(center=(640, 100))
-            play_im = pygame.image.load("images/start_button.png").convert_alpha()
+            folder = path.dirname(__file__)
+            folder = path.dirname(folder)
+            folder = path.join(folder, 'images')
+            play_im = pygame.image.load(path.join(folder, "start_button.png")).convert_alpha()
             play_imt = pygame.transform.scale(play_im, (play_im.get_width()*.80, play_im.get_height()*.80))
-            help_im = pygame.image.load("images/help_button.png").convert_alpha()
+            help_im = pygame.image.load(path.join(folder, "help_button.png")).convert_alpha()
             help_imt = pygame.transform.scale(help_im, (help_im.get_width()*.45, help_im.get_height()*.38))
-            end_im = pygame.image.load("images/end_button.png")
+            end_im = pygame.image.load(path.join(folder, "end_button.png"))
             end_imt = pygame.transform.scale(end_im, (end_im.get_width()*.45, end_im.get_height()*.35))
             play_but = Button(image=play_imt, pos=(640, 250), text_input="", font=pygame.font.Font(None, 75), base_color="#d7fcd4", hovering_color="White")
             help_but = Button(image=help_imt, pos=(640, 400), text_input="", font=pygame.font.Font(None, 75), base_color="#d7fcd4", hovering_color="White")
