@@ -48,6 +48,7 @@ class Game:
         self.study = pygame.sprite.Group()
         self.club = pygame.sprite.Group()
         self.vending = pygame.sprite.Group()
+        self.advisor = pygame.sprite.Group()
         self.elev_timer = 0
         self.club_timer = 0
         self.lili_timer = 0
@@ -117,6 +118,8 @@ class Game:
                     Coffee(self, col, row)
                 elif tile_type == 'V':
                     VendingMachine(self, col, row)
+                elif tile_type == 'A':
+                    Advisor(self, col, row)
 
                 
         
@@ -297,6 +300,8 @@ class Game:
                     Coffee(self, col, row)
                 elif tile_type == 'V':
                     VendingMachine(self, col, row)
+                elif tile_type == 'A':
+                    Advisor(self, col, row)
         ## Put Lili on random floors
         if randint(0, 1):
             self.lili = Player("RoundLili.png", 8, 10, self)

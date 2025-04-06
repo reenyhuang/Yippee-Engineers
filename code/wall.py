@@ -290,12 +290,32 @@ class VendingMachine(pygame.sprite.Sprite):
         else:
             self.image = pygame.image.load(image).convert_alpha()
             loaded[image] = self.image
-        self.image = pygame.transform.scale(self.image, (self.image.get_width() * 0.5, self.image.get_height() * 0.5))
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() * 0.05, self.image.get_height() * 0.05))
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
-        self.rect.x = x * TILE_SIZE
+        self.rect.x = x * TILE_SIZE + 12
         self.rect.y = y * TILE_SIZE
+
+class Advisor(pygame.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.advisor
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        folder = path.dirname(__file__)
+        folder = path.dirname(folder)
+        image = path.join(folder, "images", "advisor.png")
+        if image in loaded:
+            self.image = loaded[image]
+        else:
+            self.image = pygame.image.load(image).convert_alpha()
+            loaded[image] = self.image
+        self.image = pygame.transform.scale(self.image, (self.image.get_width(), self.image.get_height()))
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILE_SIZE -25
+        self.rect.y = y * TILE_SIZE -20
 
 
 class Coffee(pygame.sprite.Sprite):

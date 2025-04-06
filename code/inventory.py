@@ -13,6 +13,7 @@ class Inventory:
         self.slots.append(InventorySlot("images/computer.png", (16, 257)))
         self.slots.append(InventorySlot("images/hw.png", (16, 335)))
         self.slots.append(InventorySlot("images/charger.png", (16, 415)))
+        self.slots.append(InventorySlot("images/pizza.png", (16, 495)))
         self.slots[1].count += 1
         self.slots[3].count += 1
     
