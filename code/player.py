@@ -87,7 +87,7 @@ class Player(Sprite):
 
     def hangwfriends(self):
         now = pygame.time.get_ticks()
-        if now - self.game.friends_timer > 10000:
+        if now - self.game.friends_timer > 60000:
             friends = pygame.sprite.spritecollideany(self, self.game.friends)
             if friends:
                 if pygame.K_y in keys_down:
@@ -117,7 +117,7 @@ class Player(Sprite):
 
     def watchLaLa(self):
         now = pygame.time.get_ticks()
-        if now - self.game.movie_timer > 120000:
+        if now - self.game.movie_timer > 60000:
             movie = pygame.sprite.spritecollideany(self, self.game.movie)
             if movie:
                 if pygame.K_v in keys_down:
@@ -165,7 +165,7 @@ class Player(Sprite):
 
     def sleepy(self):
         now = pygame.time.get_ticks()
-        if now - self.game.sleep_timer > 10000:
+        if now - self.game.sleep_timer > 60000:
             sleep = pygame.sprite.spritecollideany(self, self.game.sleep)
             if sleep:
                 if pygame.K_v in keys_down:
@@ -200,7 +200,17 @@ class Player(Sprite):
             self.game.inv.slots[4].count -= 1
             pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 19}))
             keys_down.remove(pygame.K_n)  
-                    
+    
+    def drop_out(self):
+        now = pygame.time.get_ticks()
+        if now - self.game.advisor_timer > 1000:
+            advisor = pygame.sprite.spritecollideany(self, self.game.advisor)
+            if advisor:
+                if pygame.K_c in keys_down:
+                    print("drop out")
+                    self.game.inv.slots[3].count -= 1
+                    pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 20}))
+                    keys_down.remove(pygame.K_c)
 
     def update(self):
         self.move()
@@ -219,6 +229,7 @@ class Player(Sprite):
         self.club()
         self.get_food()
         self.eat()
+        self.drop_out()
 
 
 

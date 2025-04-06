@@ -65,6 +65,7 @@ class Game:
         self.sleep_timer = 0
         self.food_timer = 0
         self.piz_timer = 0
+        self.advisor_timer = 0
         
         self.player = None
         self.lili = None
@@ -73,7 +74,11 @@ class Game:
         self.custom_event = True
         self.piz = 0
         self.edu = 0
-
+        self.exam = False
+        self.show_help = False
+        self.helpt = pygame.image.load("images/help_button.png").convert_alpha()
+        self.helpt_imt = pygame.transform.scale(self.helpt, (self.helpt.get_width()*.45, self.helpt.get_height()*.38))
+        self.help_button = Button(image=self.helpt_imt, pos=(1200, 650), text_input="Help", font=pygame.font.Font(None, 20), base_color="Black", hovering_color="Red")
 
     def get_time(self):
         '''Elapsed time in seconds.'''
@@ -88,7 +93,7 @@ class Game:
         self.camera = Camera(self.curr_map.width, self.curr_map.height)
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
-        
+        table_cords = []
         player_location = (0, 0)
         for row, tiles in enumerate(self.curr_map.map_data):
             for col, tile_type in enumerate(tiles):
@@ -125,11 +130,27 @@ class Game:
                     VendingMachine(self, col, row)
                 elif tile_type == 'A':
                     Advisor(self, col, row)
+                elif tile_type == 'M':
+                    Carpet(self, col, row)
+                    Movie(self, col, row)
+                elif tile_type == 'r':
+                    Reeny(self, col, row)
+                elif tile_type == 'k':
+                    Sam(self, col, row)
+                elif tile_type == 'a':
+                    Audrey(self, col, row)
+                elif tile_type == 't':
+                    Carpet(self, col, row)
+                    table_cords.append((col, row))
+        for cord in table_cords:
+            Table(self, cord[0], cord[1])
+        table_cords.clear()
+
 
                 
         
         self.lili = Lili("RoundLili.png", 12, 12, self)
-        self.player = Player("RoundLili.png", player_location[0], player_location[1], self)
+        self.player = Player("henry.png", player_location[0], player_location[1], self)
 
     def get_clock_time(self):
         '''Return string of in game time: hours:minutes. 6 hr clock, 1 min = 1 sec.'''
@@ -142,20 +163,43 @@ class Game:
         self.menu()
         self.start_time = time.time()
         self.running = True
+        mouse = pygame.mouse.get_pos()
         while self.running:
             #have a beginning scene
-            if (self.get_clock_time() == "1:00" or self.get_clock_time() == "4:00") and self.custom_event:
+            
+            self.help_button.changeColor(mouse)
+            self.help_button.update(self.screen) 
+            if self.get_clock_time() == "1:00" and self.custom_event:
                 pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: randint(0, 5)}))
                 self.custom_event = False
+            if self.get_clock_time() == "1:32":
+                self.custom_event = True
             if (self.get_clock_time() == "2:00" or self.get_clock_time() == "3:00") and self.custom_event:
                 self.alert("Go to Class: G415")
+                self.custom_event = True
+            if (self.get_clock_time() == "0:30"):
+                self.alert("Go to grab food from vending machine")
+            if (self.get_clock_time() == "3:30"):
+                if (self.inv.slots[4].count==0):
+                    self.healthbar.hp -= 10
+                    self.alert("You didn't grab food :(  EATT")
+                    self.inv.slots[4].count += 1
+            if self.get_clock_time() == "4:00" and self.custom_event:
+                pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: randint(0, 5)}))
                 self.custom_event = False
             if self.get_clock_time() == "1:01" or self.get_clock_time() == "4:01":
                 self.custom_event = True
-            if self.get_clock_time() == "0:00" and self.custom_event:
+            if self.get_clock_time() == "0:05" and self.custom_event:
+                self.alert("You have a test today: do homework and study!")
+                self.healthbar.hp -= 5*(self.inv.slots[2].count)
                 self.inv.slots[2].count += 2
+                if self.exam:
+                    self.alert("You missed your quiz/test: -60 HP")
+                    self.healthbar.hp -= 60
+                else:
+                    self.exam = True
                 self.custom_event = False
-            if self.get_clock_time() == "0:01":
+            if self.get_clock_time() == "0:06":
                 self.custom_event = True
             if self.healthbar.hp <= 0:
                 self.screen_cap("images/jump.png", "You Died :(")
@@ -164,6 +208,8 @@ class Game:
             self.draw() ## Draw the background map
             self.update() ## Draw all sprites and update them
             self.screen.blit(font.render(self.get_clock_time(), True, (0, 0, 0), (255, 255, 255)), (1200, 10))
+            if self.show_help:
+                self.render_help_overlay()
             pygame.display.flip() ## Update screen
             
     def screen_cap(self, img, msg, font_size = 48, text_color=(255, 0, 0)):
@@ -177,8 +223,41 @@ class Game:
         pygame.display.update()
         pygame.time.wait(2000)
 
+    def render_help_overlay(self):
+        help_overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+        help_overlay.fill((255, 255, 255, 230))  # White background with alpha
+
+        font = pygame.font.Font(None, 28)
+        lines = ["So you're new here then?", 
+                       "Use WASD or arrow keys to move", 
+                       "Using the elevator: E for up, Q for down",
+                       "Press V to get coffee from the coffeeshop and SPACE to drink",
+                       "Press V to get food from the vending machine and N to eat", 
+                       "Press V to touch some grass when you are at Exits and Balconies",
+                       "Press V to take Tak a sleepy time break in the ESC office by pressing V",
+                       "Press E to interact, try it in various rooms around engineering:",
+                       "Go to a club meeting in G411 to go to a club meeting",
+                       "Go to class in G415",
+                       "Go to any study room to get prepared for your exams",
+                       "Head to 2415 when you need to take one of your exams",
+                       "Catch a screening of LaLa Land in 2300",
+                       "Go for a quick hang with friends in the atrium",
+                       "You can pet Lili the cat with P",
+                       "HW decreases mental health over time as it accumulates",
+                       "Pay attention to your health bar at the bottom. DON'T DIE!",
+                       "An average day for your avatar is 6 hours, 6 minutes in real time",
+                       "The only way to win is to press the mystery button in the mystery location. Good Luck!"]
+
+        posX, posY = 640, 150
+        for line in lines:
+            label = font.render(line, True, "Black")
+            rect = label.get_rect(center=(posX, posY))
+            help_overlay.blit(label, rect)
+            posY += 30
+
+        self.screen.blit(help_overlay, (0, 0))
     def alert(self, msg):
-        popup_width, popup_height = 400, 200
+        popup_width, popup_height = 800, 200
         popup = pygame.Surface((popup_width, popup_height))
         popup.fill((240, 240, 240))  # Light gray background
         popup_rect = popup.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
@@ -210,7 +289,6 @@ class Game:
 
     def draw(self):
         self.draw_map()
-        
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
         self.healthbar.draw(self.screen)
@@ -223,9 +301,12 @@ class Game:
         self.clock.tick(80)
         
     def events(self, hb): ## Key press events
+        mouse = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_h:
+                self.show_help = True
             elif event.type == pygame.KEYDOWN:
                 keys_down.add(event.key)
                 if event.key == pygame.K_ESCAPE:
@@ -236,25 +317,37 @@ class Game:
             elif event.type == pygame.USEREVENT:
                 event_id = event.dict[id]
                 if event_id == 0: # haunted by professor
-                    self.screen_cap("images/angry_professor.png", "Haunted by Professor: -60% HP")
+                    self.screen_cap("images/angry_professor.png", "Haunted by Professor: -60 HP")
                     hb.decrease(hb.max_hp*.6)
                 elif event_id == 1: # power outage
-                    self.screen_cap("images/blackout.png", "Power Outage: +10% HP (yayyyyyy)")
+                    self.screen_cap("images/blackout.png", "Power Outage: +10 HP (yayyyyyy)")
                     hb.increase(hb.max_hp*.1)
                 elif event_id == 2: # lose charger
-                    self.screen_cap("images/lose_charger.png", "Oh NOOOO, donde esta?: -50% HP")
-                    hb.decrease(hb.max_hp*.5)
+                    self.screen_cap("images/lose_charger.png", "Oh NOOOO, donde esta?: -50 HP")
+                    if self.inv.slots[3].count == 1:
+                        self.inv.slots[3].count -= 1
+                        hb.decrease(hb.max_hp*.5)
+                    else:
+                        self.alert("Your computer died -> no hw done -> U DIE")
+                        hb.hp = 0
                 elif event_id == 3: # cry
-                    self.screen_cap("images/crying.png", "DYIIINNGGGGG: -30% HP")
+                    self.screen_cap("images/crying.png", "DYIIINNGGGGG: -30 HP")
                     hb.decrease(hb.max_hp*.3)
                 elif event_id == 4: #computer dies
-                    self.screen_cap("images/computer_dies.png", "FCK: -40% HP")
+                    self.screen_cap("images/computer_dies.png", "FCK: -40 HP")
                     hb.decrease(hb.max_hp*.4)
                 elif event_id == 5: #have a test
-                    hb.decrease(hb.max_hp*.5 * min(self.edu, 5))
+                    self.alert("Test Time!")
+                    self.exam = False
+                    pygame.time.wait(5000)
+                    if randint(0, 15):
+                        hb.decrease(hb.max_hp*.5 * (1/min(self.edu, 5)))
+                    else:
+                        self.alert("You failed the exam!! U DIE")
+                        hb.hp = 0
                 elif event_id == 6: #starvation/dehydation
                     hb.decrease(hb.max_hp*.1)
-                    self.alert("Starving! -10% HP")
+                    self.alert("Starving! -10 HP")
                 elif event_id == 7: #study (less than 3 hrs)
                     hb.increase(hb.max_hp*.05)
                 elif event_id == 8: #study more than 3 hrs
@@ -262,17 +355,24 @@ class Game:
                 elif event_id == 9: #drink coffee
                     hb.increase(hb.max_hp*.1)
                 elif event_id == 10: #hang with friends
-                    hb.increase(hb.max_hp*.3)
+                    self.alert("Hanging with friends!!")
+                    pygame.time.wait(10000)
+                    hb.increase(hb.max_hp*.1)
                 elif event_id == 11: #sleep in esc office
+                    self.alert("Zzzzzzzzzzzzz")
+                    pygame.time.wait(15000)
                     if randint(0, 9):
                         hb.increase(hb.max_hp*.2)
                     else:
+                        self.alert("Cockroach fell on you while napping!! U DIE")
                         hb.hp = 0
                 elif event_id == 12: #go to balcony
                     hb.increase(hb.max_hp*.1)
                 elif event_id == 13: #go to club meeeting
                     hb.increase(hb.max_hp*.05)
                 elif event_id == 14: #watch la la land
+                    self.alert("Watching La La Land~")
+                    pygame.time.wait(20000)
                     hb.increase(hb.max_hp*.3)
                 elif event_id == 15: #pet lili
                     hb.increase(hb.max_hp*.01)
@@ -286,7 +386,10 @@ class Game:
                     hb.decrease(hb.max_hp*.1)
                 elif event_id == 19: #eat pizza
                     hb.increase(hb.max_hp*.03)
-            
+                elif event_id == 20: #drop out and start a cat cafe
+                    self.screen_cap("images/cat_cafe.png", "You dropped out and started a cat cafe, you win!!")
+                    self.quit()
+
     
     def draw_map(self):
         self.screen.fill(BG_COLOR)
@@ -302,11 +405,15 @@ class Game:
         self.friends.empty()
         spawn_x, spawn_y = self.load_map()
         
-        self.player = Player("RoundLili.png", spawn_x, spawn_y, self)
+        self.player = Player("henry.png", spawn_x, spawn_y, self)
 
     def load_map(self):
         spawn_x, spawn_y = 0, 0
         need_spawn = True
+        reeny_cords = None
+        sam_cords = None
+        audrey_cords = None
+        table_cords = []
         for row, tiles in enumerate(self.curr_map.map_data):
             for col, tile_type in enumerate(tiles):
                 if tile_type == '1':
@@ -344,9 +451,34 @@ class Game:
                     VendingMachine(self, col, row)
                 elif tile_type == 'A':
                     Advisor(self, col, row)
+                elif tile_type == 'M':
+                    Movie(self, col, row)
+                elif tile_type == 'r':
+                    reeny_cords = (col, row)
+                    Reeny(self, col, row)
+                elif tile_type == 'k':
+                    Carpet(self, col, row)
+                    sam_cords = (col, row)
+                elif tile_type == 'a':
+                    Carpet(self, col, row)
+                    audrey_cords = (col, row)
+                elif tile_type == 't':
+                    Carpet(self, col, row)
+                    table_cords.append((col, row))
         ## Put Lili on random floors
         if randint(0, 1):
             self.lili = Lili("RoundLili.png", 8, 10, self)
+        
+        for cord in table_cords:
+            Table(self, cord[0], cord[1])
+        table_cords.clear()
+
+        if reeny_cords:
+            Reeny(self, reeny_cords[0], reeny_cords[1])
+        if sam_cords:
+            Sam(self, sam_cords[0], sam_cords[1])
+        if audrey_cords:
+            Audrey(self, audrey_cords[0], audrey_cords[1])
 
         return spawn_x, spawn_y
 
@@ -359,27 +491,35 @@ class Game:
             help_mouse = pygame.mouse.get_pos()
             self.screen.fill("white")
             posX = 640
-            posY = 260
+            posY = 80
             position = posX, posY
             temptxt = ["So you're new here then?", 
                        "Use WASD or arrow keys to move", 
-                       "Press space to drink coffee", 
                        "Using the elevator: E for up, Q for down",
+                       "Press V to get coffee from the coffeeshop and SPACE to drink",
+                       "Press V to get food from the vending machine and N to eat", 
+                       "Press V to touch some grass when you are at Exits and Balconies",
+                       "Press V to take Tak a sleepy time break in the ESC office by pressing V",
+                       "Press E to interact, try it in various rooms around engineering:",
+                       "Go to a club meeting in G411 to go to a club meeting",
+                       "Go to class in G415",
+                       "Go to any study room to get prepared for your exams",
+                       "Head to 2415 when you need to take one of your exams",
+                       "Catch a screening of LaLa Land in 2300",
+                       "Go for a quick hang with friends in the atrium",
+                       "You can pet Lili the cat with P",
                        "HW decreases mental health over time as it accumulates",
                        "Pay attention to your health bar at the bottom. DON'T DIE!",
-                       "You can pet Lili the cat with L",
-                       "Press E to interact, try it in various spaces around engineering and in classrooms/studyrooms",
-                       "An average day for your avatar is 6 hours, 6 minutes in real time"]
+                       "An average day for your avatar is 6 hours, 6 minutes in real time",
+                       "The only way to win is to press the mystery button in the mystery location. Good Luck!"]
             label = []
             for line in temptxt:
                 label.append(font.render(line, True, "Black"))
             for line in range(len(label)):
                 help_rect = label[line].get_rect(center=(position[0], position[1]))
-                posY += 20
+                posY += 50
                 position = posX, posY
                 self.screen.blit(label[line], help_rect)
-                
-
             help_bck = Button(image=None, pos=(640, 460), 
                                 text_input="BACK", font=pygame.font.Font(None, 75), base_color="Black", hovering_color="Green")
 
@@ -396,7 +536,47 @@ class Game:
 
             pygame.display.update()
 
-    
+    def story(self):
+        while self.running:
+            mouse = pygame.mouse.get_pos()
+            self.screen.fill("white")
+            posX = 640
+            posY = 260
+            position = posX, posY
+            temptxt = ["You're an engineering student at KU", 
+                       "Experience the daily life of an engineer!", 
+                       "There are 6 hours in a day, try to survive",
+                       "This game is intended for you to build healthier habits as an engineeering student" 
+                       "Use WASD to explore, E for any 'educational' interaction, V for others, P to pet Lili",
+                       "To use elevator, go in the black box and use E to go up a floor and Q to go down"
+                       "HW decreases mental health each day as it accumulates",
+                       "There are many tasks you can do to increase your mental health"
+                       "Pay attention to your health bar at the bottom. DON'T DIE!",
+                       "There will be spontaneous events :)"
+                       "Click the 'Help' button for more detailed information"]
+            label = []
+            for line in temptxt:
+                label.append(font.render(line, True, "Black"))
+            for line in range(len(label)):
+                help_rect = label[line].get_rect(center=(position[0], position[1]))
+                posY += 20
+                position = posX, posY
+                self.screen.blit(label[line], help_rect)
+                
+            help_bck = Button(image=None, pos=(640, 460), 
+                                text_input="Let's Go", font=pygame.font.Font(None, 75), base_color="Black", hovering_color="Red")
+            help_bck.changeColor(mouse)
+            help_bck.update(self.screen)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if help_bck.checkForInput(mouse):
+                        self.running = False
+            pygame.display.update()
+
     def menu(self):
         while self.running:
             self.screen.fill("white")
@@ -425,6 +605,7 @@ class Game:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if play_but.checkForInput(mouse):
+                        self.story()
                         self.running = False
                     if help_but.checkForInput(mouse):
                         self.help()

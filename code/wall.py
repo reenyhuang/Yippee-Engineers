@@ -165,7 +165,7 @@ class Carpet(pygame.sprite.Sprite):
 
 class Grass(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
-        self.groups = game.all_sprites
+        self.groups = game.all_sprites, game.grass
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         folder = path.dirname(__file__)
@@ -208,12 +208,13 @@ class Classroom(pygame.sprite.Sprite):
         self.game = game
         folder = path.dirname(__file__)
         folder = path.dirname(folder)
-        image = path.join(folder, "images", "red_tile.png")
+        image = path.join(folder, "images", "professor.png")
         if image in loaded:
             self.image = loaded[image]
         else:
             self.image = pygame.image.load(image).convert_alpha()
             loaded[image] = self.image
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() * 0.25, self.image.get_height() * 0.25))
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -276,6 +277,78 @@ class Friends(pygame.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILE_SIZE -11
         self.rect.y = y * TILE_SIZE -29
+class Reeny(Friends):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        folder = path.dirname(__file__)
+        folder = path.dirname(folder)
+        image = path.join(folder, "images", "reeny.png")
+        if image in loaded:
+            self.image = loaded[image]
+        else:
+            self.image = pygame.image.load(image).convert_alpha()
+            loaded[image] = self.image
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() * 0.25, self.image.get_height() * 0.25))
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+class Sam(Friends):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        folder = path.dirname(__file__)
+        folder = path.dirname(folder)
+        image = path.join(folder, "images", "sam.png")
+        if image in loaded:
+            self.image = loaded[image]
+        else:
+            self.image = pygame.image.load(image).convert_alpha()
+            loaded[image] = self.image
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() * 0.25, self.image.get_height() * 0.25))
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+class Audrey(Friends):
+    def __init__(self, game, x, y):
+        super().__init__(game, x, y)
+        folder = path.dirname(__file__)
+        folder = path.dirname(folder)
+        image = path.join(folder, "images", "audrey_rip.png")
+        if image in loaded:
+            self.image = loaded[image]
+        else:
+            self.image = pygame.image.load(image).convert_alpha()
+            loaded[image] = self.image
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() * 0.25, self.image.get_height() * 0.25))
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILE_SIZE
+        self.rect.y = y * TILE_SIZE
+
+
+class Table(pygame.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.study
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        folder = path.dirname(__file__)
+        folder = path.dirname(folder)
+        image = path.join(folder, "images", "table.png")
+        if image in loaded:
+            self.image = loaded[image]
+        else:
+            self.image = pygame.image.load(image).convert_alpha()
+            loaded[image] = self.image
+        self.image = pygame.transform.scale(self.image, (self.image.get_width()*3, self.image.get_height()*3))
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILE_SIZE -96
+        self.rect.y = y * TILE_SIZE -96
 
 class VendingMachine(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -351,11 +424,12 @@ class Movie(pygame.sprite.Sprite):
         else:
             self.image = pygame.image.load(image).convert_alpha()
             loaded[image] = self.image
+        self.image = pygame.transform.scale(self.image, (self.image.get_width(), self.image.get_height()))
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
-        self.rect.x = x * TILE_SIZE
-        self.rect.y = y * TILE_SIZE
+        self.rect.x = x * TILE_SIZE - 16
+        self.rect.y = y * TILE_SIZE - 16
 
 class Sleep(pygame.sprite.Sprite):
     def __init__(self, game, x, y):

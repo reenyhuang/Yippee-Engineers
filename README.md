@@ -1,6 +1,6 @@
 # To Do List
 
-- [ ] Add the NPCs and change main character
+- [x] Add the NPCs and change main character
 
 ## Artwork
 
@@ -45,7 +45,6 @@
 ## Game Screen/UI/Title Screen/End Screen
 
 - [x] Title screen with game info
-- [ ] Customizable settings page
 - [x] Game end screen (only for losing, make it literally impossible to win?)
 - [x] Help screen
 
@@ -55,7 +54,7 @@
 - [x] Get haunted by a professor *
 - [x] Tests *
 - [x] Power outage *
-- [ ] Starvation/Dehydration * --food count will determine health
+- [x] Starvation/Dehydration * --food count will determine health
 - [x] Computer dies *
 - [x] Lose charger *
 - [x] Studying *
@@ -64,16 +63,16 @@
 - [x] Club meetings (5:30 pm) *
 - [x] Get coffee *
 - [x] Watch La La Land*
-- [ ] Snacks -- add food to the inventory--find food img for sam
+- [x] Snacks -- add food to the inventory--find food img for sam
 - [x] Pet Lili*
 - [x] Mental Health Walk (first floor walk) *
-- [] Go to class and sudy and reduce effect of test (2 times a day for 10 sec/per) *
+- [x] Go to class and sudy and reduce effect of test (2 times a day for 10 sec/per) *
 - [x] press key to drink coffee
 - [x] Cry *
 - [x] go nap*
-- [ ] have a backstory
+- [x] have a backstory
 
-- [ ] add alert when it is time to go to class/exam
+- [x] add alert when it is time to go to class/exam
 
 ## Screencaps
 
