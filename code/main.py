@@ -7,6 +7,7 @@ from player import Player
 from healthBar import HealthBar
 from inventory import Inventory
 from button import Button
+import sys
 import pygame
 from os import path
 from random import randint
@@ -75,6 +76,9 @@ class Game:
         return f"{hours}:{minutes:02d}"
 
     def run(self):
+        self.menu()
+        self.start_time = time.time()
+        self.running = True
         while self.running:
             
             if self.get_clock_time() == "1:00" and self.custom_event:
@@ -93,7 +97,13 @@ class Game:
             self.screen.blit(font.render(self.get_clock_time(), True, (0, 0, 0), (255, 255, 255)), (1200, 10))
             pygame.display.flip() ## Update screen
             
-    
+    def screen_cap(self, img):
+        img1 = pygame.image.load(img).convert_alpha()
+        imgt = pygame.transform.scale(img1, (WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.screen.blit(imgt, (0,0))
+        pygame.display.update()
+        pygame.time.wait(2000)
+
     def draw(self):
         self.draw_map()
         
@@ -125,6 +135,7 @@ class Game:
             elif event.type == pygame.USEREVENT:
                 event_id = event.dict[id]
                 if event_id == 0: # haunted by professor
+                    self.screen_cap("images/angry_professor.png")
                     hb.decrease(hb.hp*.2)
                 elif event_id == 1: # power outage
                     hb.increase(hb.hp*.1)
@@ -181,13 +192,17 @@ class Game:
         self.player = Player("RoundLili.png", spawn_x, spawn_y, self)
 
     def load_map(self):
+        spawn_x, spawn_y = 0, 0
+        need_spawn = True
         for row, tiles in enumerate(self.curr_map.map_data):
             for col, tile_type in enumerate(tiles):
                 if tile_type == '1':
                     Wall(self, col, row)
                 elif tile_type == 'E':
                     Elevator(self, col, row)
-                    spawn_x, spawn_y = col, row
+                    if need_spawn:
+                        spawn_x, spawn_y = col, row
+                        need_spawn = False
         ## Put Lili on random floors
         if randint(0, 1):
             self.lili = Player("RoundLili.png", 8, 10, self)
@@ -198,11 +213,69 @@ class Game:
         pygame.quit()
         exit()
     
-    def menu():
-        mouse = pygame.mouse.get_pos()
-        text = 
+    def help(self):
+        while self.running:
+            help_mouse = pygame.mouse.get_pos()
+            self.screen.fill("white")
 
+            help_txt = font.render("So you're new here then?\n\nUse WASD or arrow keys to move\n\nPress space to drink coffee\n\nUsing the elevator: E for up, Q for down\n\nHW decreases mental health over time as it accumulates\n\nPay attention to your health bar at the bottom. DON'T DIE!\n\nYou can pet Lili the cat with L\n\nPress E to interact, try it on unique tiles and in classrooms/studyrooms\n\nAn average day for your avatar is 6 hours, 6 minutes in real time", True, "Black")
+            help_rect = help_txt.get_rect(center=(640, 260))
+            self.screen.blit(help_txt, help_rect)
 
+            help_bck = Button(image=None, pos=(640, 460), 
+                                text_input="BACK", font=pygame.font.Font(None, 75), base_color="Black", hovering_color="Green")
+
+            help_bck.changeColor(help_mouse)
+            help_bck.update(self.screen)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if help_bck.checkForInput(help_mouse):
+                        self.run()
+
+            pygame.display.update()
+
+    
+    def menu(self):
+        while self.running:
+            self.screen.fill("white")
+            mouse = pygame.mouse.get_pos()
+            txt = pygame.font.Font(None, 100).render("Main Menu", True, "#b68f40")
+            rect = txt.get_rect(center=(640, 100))
+            play_im = pygame.image.load("images/start_button.png").convert_alpha()
+            play_imt = pygame.transform.scale(play_im, (play_im.get_width()*.80, play_im.get_height()*.80))
+            help_im = pygame.image.load("images/help_button.png").convert_alpha()
+            help_imt = pygame.transform.scale(help_im, (help_im.get_width()*.45, help_im.get_height()*.38))
+            end_im = pygame.image.load("images/end_button.png")
+            end_imt = pygame.transform.scale(end_im, (end_im.get_width()*.45, end_im.get_height()*.35))
+            play_but = Button(image=play_imt, pos=(640, 250), text_input="", font=pygame.font.Font(None, 75), base_color="#d7fcd4", hovering_color="White")
+            help_but = Button(image=help_imt, pos=(640, 400), text_input="", font=pygame.font.Font(None, 75), base_color="#d7fcd4", hovering_color="White")
+            end_but = Button(image=end_imt, pos=(640, 550), text_input="", font=pygame.font.Font(None, 75), base_color="#d7fcd4", hovering_color="White")
+
+            self.screen.blit(txt, rect)
+
+            for button in [play_but, help_but, end_but]:
+                button.changeColor(mouse)
+                button.update(self.screen)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if play_but.checkForInput(mouse):
+                        self.running = False
+                    if help_but.checkForInput(mouse):
+                        self.help()
+                    if end_but.checkForInput(mouse):
+                        pygame.quit()
+                        sys.exit()
+
+            pygame.display.update()
+        self.running=True
 if __name__ == '__main__':
     game = Game()
     game.new()
