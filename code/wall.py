@@ -451,6 +451,26 @@ class Sleep(pygame.sprite.Sprite):
         self.rect.x = x * TILE_SIZE -61
         self.rect.y = y * TILE_SIZE -21
 
+class Balcony(pygame.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.balcony
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        folder = path.dirname(__file__)
+        folder = path.dirname(folder)
+        image = path.join(folder, "images", "brown_tile.png")
+        if image in loaded:
+            self.image = loaded[image]
+        else:
+            self.image = pygame.image.load(image).convert_alpha()
+            loaded[image] = self.image
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() *1.2, self.image.get_height() *1.2))
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILE_SIZE -16
+        self.rect.y = y * TILE_SIZE -12
+
 class Study(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.study

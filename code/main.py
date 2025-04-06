@@ -79,9 +79,6 @@ class Game:
         folder = path.dirname(__file__)
         folder = path.dirname(folder)
         
-        self.helpt = pygame.image.load(path.join(folder, "images", "help_button.png")).convert_alpha()
-        self.helpt_imt = pygame.transform.scale(self.helpt, (self.helpt.get_width()*.45, self.helpt.get_height()*.38))
-        self.help_button = Button(image=self.helpt_imt, pos=(1200, 650), text_input="Help", font=pygame.font.Font(None, 20), base_color="Black", hovering_color="Red")
 
     def get_time(self):
         '''Elapsed time in seconds.'''
@@ -145,6 +142,8 @@ class Game:
                 elif tile_type == 't':
                     Carpet(self, col, row)
                     table_cords.append((col, row))
+                elif tile_type == 'b':
+                    Balcony(self, col, row)
         for cord in table_cords:
             Table(self, cord[0], cord[1])
         table_cords.clear()
@@ -169,9 +168,6 @@ class Game:
         mouse = pygame.mouse.get_pos()
         while self.running:
             #have a beginning scene
-            
-            self.help_button.changeColor(mouse)
-            self.help_button.update(self.screen) 
             if self.get_clock_time() == "1:00" and self.custom_event:
                 pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: randint(0, 5)}))
                 self.custom_event = False
@@ -239,20 +235,21 @@ class Game:
                        "Using the elevator: E for up, Q for down",
                        "Press V to get coffee from the coffeeshop and SPACE to drink",
                        "Press V to get food from the vending machine and N to eat", 
-                       "Press V to touch some grass when you are at Exits and Balconies",
-                       "Press V to take Tak a sleepy time break in the ESC office by pressing V",
+                       "Press V to take a mental health walk when you are out on the grass",
+                       "Press V to take a break on the balcony",
+                       "Press V to take a sleepy time break in the ESC office",
                        "Press E to interact, try it in various rooms around engineering:",
                        "Go to a club meeting in G411 to go to a club meeting",
                        "Go to class in G415",
                        "Go to any study room to get prepared for your exams",
                        "Head to 2415 when you need to take one of your exams",
                        "Catch a screening of LaLa Land in 2300",
-                       "Go for a quick hang with friends in the atrium",
+                       "Go for a quick hang with friends in the atrium (press Y)",
                        "You can pet Lili the cat with P",
                        "HW decreases mental health over time as it accumulates",
                        "Pay attention to your health bar at the bottom. DON'T DIE!",
                        "An average day for your avatar is 6 hours, 6 minutes in real time",
-                       "The only way to win is to press the mystery button in the mystery location. Good Luck!"]
+                       "Make sure to explore, there is a secret way to win. Good Luck!"]
 
         posX, posY = 640, 150
         for line in lines:
@@ -313,6 +310,8 @@ class Game:
                 self.running = False
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_h:
                 self.show_help = True
+            elif event.type == pygame.KEYUP and event.key == pygame.K_h:
+                self.show_help = False
             elif event.type == pygame.KEYDOWN:
                 keys_down.add(event.key)
                 if event.key == pygame.K_ESCAPE:
@@ -460,8 +459,8 @@ class Game:
                 elif tile_type == 'M':
                     Movie(self, col, row)
                 elif tile_type == 'r':
+                    Carpet(self, col, row)
                     reeny_cords = (col, row)
-                    Reeny(self, col, row)
                 elif tile_type == 'k':
                     Carpet(self, col, row)
                     sam_cords = (col, row)
@@ -471,6 +470,8 @@ class Game:
                 elif tile_type == 't':
                     Carpet(self, col, row)
                     table_cords.append((col, row))
+                elif tile_type == 'b':
+                    Balcony(self, col, row)
         ## Put Lili on random floors
         if randint(0, 1):
             self.lili = Lili("RoundLili.png", 8, 10, self)
@@ -559,7 +560,7 @@ class Game:
                        "There are many tasks you can do to increase your mental health"
                        "Pay attention to your health bar at the bottom. DON'T DIE!",
                        "There will be spontaneous events :)"
-                       "Click the 'Help' button for more detailed information"]
+                       "Press 'h' for more detailed information"]
             label = []
             for line in temptxt:
                 label.append(font.render(line, True, "Black"))
