@@ -97,10 +97,14 @@ class Game:
             self.screen.blit(font.render(self.get_clock_time(), True, (0, 0, 0), (255, 255, 255)), (1200, 10))
             pygame.display.flip() ## Update screen
             
-    def screen_cap(self, img):
+    def screen_cap(self, img, msg, font_size = 48, text_color=(255, 0, 0)):
         img1 = pygame.image.load(img).convert_alpha()
         imgt = pygame.transform.scale(img1, (WINDOW_WIDTH, WINDOW_HEIGHT))
         self.screen.blit(imgt, (0,0))
+        font = pygame.font.Font(None, font_size)
+        text = font.render(msg, True, text_color)
+        text_rect = text.get_rect(center=(WINDOW_WIDTH // 2, 50))
+        self.screen.blit(text, text_rect)
         pygame.display.update()
         pygame.time.wait(2000)
 
@@ -135,47 +139,51 @@ class Game:
             elif event.type == pygame.USEREVENT:
                 event_id = event.dict[id]
                 if event_id == 0: # haunted by professor
-                    self.screen_cap("images/angry_professor.png")
-                    hb.decrease(hb.hp*.2)
+                    self.screen_cap("images/angry_professor.png", "Haunted by Professor: -20% HP")
+                    hb.decrease(hb.max_hp*.2)
                 elif event_id == 1: # power outage
-                    hb.increase(hb.hp*.1)
+                    self.screen_cap("images/blackout.png", "Power Outage: +10% hp (yayyyyyy)")
+                    hb.increase(hb.max_hp*.1)
                 elif event_id == 2: # lose charger
-                    hb.decrease(hb.hp*.5)
+                    self.screen_cap("images/lose_charger.png", "Oh NOOOO, donde esta?: -50% hp")
+                    hb.decrease(hb.max_hp*.5)
                 elif event_id == 3: # cry
-                    hb.decrease(hb.hp*.2)
+                    self.screen_cap("images/crying.png", "DYIIINNGGGGG: -20% hp")
+                    hb.decrease(hb.max_hp*.2)
                 elif event_id == 4: #computer dies
-                    hb.decrease(hb.hp*.6)
+                    self.screen_cap("images/lose_charger.png", "Oh NOOOO, donde esta?: -50% max_hp")
+                    hb.decrease(hb.max_hp*.6)
                 elif event_id == 5: #have a test
-                    hb.decrease(hb.hp*.3)
+                    hb.decrease(hb.max_hp*.3)
                 elif event_id == 6: #starvation/dehydation
-                    hb.decrease(hb.hp*.1)
+                    hb.decrease(hb.max_hp*.1)
                 elif event_id == 7: #study (less than 3 hrs)
-                    hb.increase(hb.hp*.2)
+                    hb.increase(hb.max_hp*.2)
                 elif event_id == 8: #study more than 3 hrs
-                    hb.decrease(hb.hp*.4)
+                    hb.decrease(hb.max_hp*.4)
                 elif event_id == 9: #drink coffee
-                    hb.increase(hb.hp*.2)
+                    hb.increase(hb.max_hp*.2)
                 elif event_id == 10: #hang with friends
-                    hb.increase(hb.hp*.5)
+                    hb.increase(hb.max_hp*.5)
                 elif event_id == 11: #sleep in esc office
                     if randint(0, 9):
-                        hb.increase(hb.hp*.3)
+                        hb.increase(hb.max_hp*.3)
                     else:
-                        hb.decrease(hb.hp*.6)
+                        hb.decrease(hb.max_hp*.6)
                 elif event_id == 12: #go to balcony
-                    hb.increase(hb.hp*.1)
+                    hb.increase(hb.max_hp*.1)
                 elif event_id == 13: #go to club meeeting
-                    hb.increase(hb.hp*.05)
+                    hb.increase(hb.max_hp*.05)
                 elif event_id == 14: #watch la la land
-                    hb.increase(hb.hp*.3)
+                    hb.increase(hb.max_hp*.3)
                 elif event_id == 15: #pet lili
-                    hb.increase(hb.hp*.6)
+                    hb.increase(hb.max_hp*.6)
                 elif event_id == 16: #mental health walk
-                    hb.increase(hb.hp*.3)
+                    hb.increase(hb.max_hp*.3)
                 elif event_id == 17: #go to class
-                    hb.decrease(hb.hp*.2)
+                    hb.decrease(hb.max_hp*.2)
                 elif event_id == 18: #do hw
-                    hb.decrease(hb.hp*.1)
+                    hb.decrease(hb.max_hp*.1)
             
     
     def draw_map(self):
@@ -217,8 +225,10 @@ class Game:
         while self.running:
             help_mouse = pygame.mouse.get_pos()
             self.screen.fill("white")
-
-            help_txt = font.render("So you're new here then?\n\nUse WASD or arrow keys to move\n\nPress space to drink coffee\n\nUsing the elevator: E for up, Q for down\n\nHW decreases mental health over time as it accumulates\n\nPay attention to your health bar at the bottom. DON'T DIE!\n\nYou can pet Lili the cat with L\n\nPress E to interact, try it on unique tiles and in classrooms/studyrooms\n\nAn average day for your avatar is 6 hours, 6 minutes in real time", True, "Black")
+            temptxt = """So you're new here then?"
+            "Use WASD or arrow keys to move
+            Press space to drink coffee\n\nUsing the elevator: E for up, Q for down\n\nHW decreases mental health over time as it accumulates\n\nPay attention to your health bar at the bottom. DON'T DIE!\n\nYou can pet Lili the cat with L\n\nPress E to interact, try it on unique tiles and in classrooms/studyrooms\n\nAn average day for your avatar is 6 hours, 6 minutes in real time"""
+            help_txt = font.render(temptxt, True, "Black")
             help_rect = help_txt.get_rect(center=(640, 260))
             self.screen.blit(help_txt, help_rect)
 
