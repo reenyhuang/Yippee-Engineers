@@ -36,6 +36,12 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         self.elevators = pygame.sprite.Group()
+        self.classroom = pygame.sprite.Group()
+        self.friends = pygame.sprite.Group()
+        self.grass = pygame.sprite.Group()
+        self.coffee = pygame.sprite.Group()
+        self.movie = pygame.sprite.Group()
+        self.sleep = pygame.sprite.Group()
         self.elev_timer = 0
         self.player = None
         self.lili = None
@@ -151,7 +157,7 @@ class Game:
                     self.screen_cap("images/crying.png", "DYIIINNGGGGG: -20% hp")
                     hb.decrease(hb.max_hp*.2)
                 elif event_id == 4: #computer dies
-                    self.screen_cap("images/lose_charger.png", "Oh NOOOO, donde esta?: -50% max_hp")
+                    self.screen_cap("images/computer_dies.png", "FCK: -60% max_hp")
                     hb.decrease(hb.max_hp*.6)
                 elif event_id == 5: #have a test
                     hb.decrease(hb.max_hp*.3)
@@ -196,6 +202,8 @@ class Game:
         self.all_sprites.empty()
         self.walls.empty()
         self.elevators.empty()
+        self.classroom.empty()
+        self.friends.empty()
         spawn_x, spawn_y = self.load_map()
         self.player = Player("RoundLili.png", spawn_x, spawn_y, self)
 

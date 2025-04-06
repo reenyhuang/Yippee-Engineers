@@ -21,6 +21,10 @@ GRID_COLOR = (155, 158, 163)
 ## c = Chair
 ## A = Advisor
 ## S = Starbucks
+## R = vert balcony
+## H = horiz balcony
+## J = corner balcony
+## K = corner balcony
 ## Character currently 4 tiles wide
 ## Make everything very large
 

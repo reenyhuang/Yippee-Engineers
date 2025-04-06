@@ -82,6 +82,24 @@ class Player(Sprite):
                     self.game.elev_timer = now
                     self.game.change_floor(current_floor - 1)
                     keys_down.remove(pygame.K_q)
+
+    def go_to_class(self):
+        pass
+
+    def hangwfriends(self):
+        pass
+
+    def petLili(self):
+        pass
+
+    def takeExam(self):
+        pass
+
+    def watchLaLa(self):
+        pass
+
+    def balcony(self):
+        pass
                     
 
     def update(self):
