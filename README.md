@@ -1,12 +1,14 @@
 # To Do List
 
+- [ ] Add the NPCs and change main character
+
 ## Artwork
 
 - [x] Round Lili
 - [x] Tiles: 32 pixel squares
-- [ ] Stick People
-  - [ ] 4 NPCs to interact with
-  - [ ] Main Player
+- [x] Stick People
+  - [x] 4 NPCs to interact with
+  - [x] Main Player
 - [x] Desks and Chairs
 - [x] Elevator Tile
 - [x] Coffee House
@@ -44,7 +46,7 @@
 
 - [x] Title screen with game info
 - [ ] Customizable settings page
-- [ ] Game end screen (only for losing, make it literally impossible to win?)
+- [x] Game end screen (only for losing, make it literally impossible to win?)
 - [x] Help screen
 
 ## Events/Tasks
@@ -53,23 +55,25 @@
 - [x] Get haunted by a professor *
 - [x] Tests *
 - [x] Power outage *
-- [ ] Starvation/Dehydration *
+- [ ] Starvation/Dehydration * --food count will determine health
 - [x] Computer dies *
 - [x] Lose charger *
-- [ ] Studying *
-- [ ] Hang out with friends *
-- [ ] Go outside (balconey) *
-- [ ] Club meetings (5:30 pm) *
-- [ ] Get coffee *
-- [ ] Watch La La Land*
-- [ ] Snacks
-- [ ] Pet Lili*
-- [ ] Mental Health Walk (first floor walk) *
-- [ ] Go to class (2 times a day for 10 sec/per) *
-- [ ] Do homework *
-- [ ] press key to drink coffee
+- [x] Studying *
+- [x] Hang out with friends *
+- [x] Go outside (balconey) *
+- [x] Club meetings (5:30 pm) *
+- [x] Get coffee *
+- [x] Watch La La Land*
+- [ ] Snacks -- add food to the inventory--find food img for sam
+- [x] Pet Lili*
+- [x] Mental Health Walk (first floor walk) *
+- [] Go to class and sudy and reduce effect of test (2 times a day for 10 sec/per) *
+- [x] press key to drink coffee
 - [x] Cry *
-- [ ] go nap*
+- [x] go nap*
+- [ ] have a backstory
+
+- [ ] add alert when it is time to go to class/exam
 
 ## Screencaps
 
@@ -77,4 +81,4 @@
 
 ## Death Sequence
 
-- [ ] Jump off the top of Summerfield :)
+- [x] Jump off the top of Summerfield :)

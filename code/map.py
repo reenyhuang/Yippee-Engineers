@@ -10,7 +10,8 @@ TILE_SIZE = 32
 GRID_COLOR = (155, 158, 163)
 
 ## Tilemap txt doc format:
-## . = empty/grass
+## . = empty
+## G = grass
 ## 1 = wall
 ## P = spawn point
 ## E = Elevator
@@ -18,7 +19,7 @@ GRID_COLOR = (155, 158, 163)
 ## C = Carpet
 ## T = Tile
 ## t = Table
-## c = Chair
+## c = Classroom
 ## A = Advisor
 ## S = Starbucks
 ## R = vert balcony

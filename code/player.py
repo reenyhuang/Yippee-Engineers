@@ -84,27 +84,149 @@ class Player(Sprite):
                     keys_down.remove(pygame.K_q)
 
     def go_to_class(self):
-        pass
+        now = pygame.time.get_ticks()
+        if now - self.game.class_timer > 15000:
+            classroom = pygame.sprite.spritecollideany(self, self.game.classroom)
+            if classroom:
+                if pygame.K_e in keys_down:
+                    self.game.class_timer = now
+                    pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 17}))
+                    keys_down.remove(pygame.K_e)
+
+    def study(self):
+        now = pygame.time.get_ticks()
+        if now - self.game.study_timer > 60000:
+            study = pygame.sprite.spritecollideany(self, self.game.study)
+            if study:
+                if pygame.K_e in keys_down:
+                    self.game.study_timer = now
+                    pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 7}))
+                    keys_down.remove(pygame.K_e)
 
     def hangwfriends(self):
-        pass
+        now = pygame.time.get_ticks()
+        if now - self.game.friends_timer > 10000:
+            friends = pygame.sprite.spritecollideany(self, self.game.friends)
+            if friends:
+                if pygame.K_y in keys_down:
+                    self.game.friends_timer = now
+                    pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 10}))
+                    keys_down.remove(pygame.K_y)
 
     def petLili(self):
-        pass
+        now = pygame.time.get_ticks()
+        if now - self.game.lili_timer > 3000:
+            pet = pygame.sprite.spritecollideany(self, self.game.pet)
+            if pet:
+                if pygame.K_p in keys_down:
+                    self.game.lili_timer = now
+                    pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 15}))
+                    keys_down.remove(pygame.K_p)
 
     def takeExam(self):
-        pass
+        now = pygame.time.get_ticks()
+        if now - self.game.test_timer > 10000:
+            test = pygame.sprite.spritecollideany(self, self.game.test)
+            if test:
+                if pygame.K_e in keys_down:
+                    self.game.test_timer = now
+                    pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 5}))
+                    keys_down.remove(pygame.K_e)
 
     def watchLaLa(self):
-        pass
+        now = pygame.time.get_ticks()
+        if now - self.game.movie_timer > 120000:
+            movie = pygame.sprite.spritecollideany(self, self.game.movie)
+            if movie:
+                if pygame.K_v in keys_down:
+                    self.game.movie_timer = now
+                    pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 14}))
+                    keys_down.remove(pygame.K_v)
 
     def balcony(self):
-        pass
+        now = pygame.time.get_ticks()
+        if now - self.game.balcony_timer > 10000:
+            balcony = pygame.sprite.spritecollideany(self, self.game.balcony)
+            if balcony:
+                if pygame.K_v in keys_down:
+                    self.game.balcony_timer = now
+                    pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 12}))
+                    keys_down.remove(pygame.K_v)
+
+    def walk(self):
+        now = pygame.time.get_ticks()
+        if now - self.game.walk_timer > 10000:
+            walk = pygame.sprite.spritecollideany(self, self.game.grass)
+            if walk:
+                if pygame.K_v in keys_down:
+                    self.game.walk_timer = now
+                    pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 16}))
+                    keys_down.remove(pygame.K_v)
+
+    def grab_coffee(self):
+        now = pygame.time.get_ticks()
+        if now - self.game.coffee_timer > 18000:
+            cof = pygame.sprite.spritecollideany(self, self.game.coffee)
+            if cof:
+                if pygame.K_v in keys_down:
+                    self.game.coffee_timer = now
+                    self.game.inv.slots[0].count += 1
+                    keys_down.remove(pygame.K_v)
+    
+    def drink_coffee(self):
+        now = pygame.time.get_ticks()
+        if (now - self.game.coffee1_timer > 18000) and (pygame.K_SPACE in keys_down) and (self.game.inv.slots[0].count > 0):
+            self.game.coffee_timer = now
+            self.game.inv.slots[0].count -= 1
+            pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 9}))
+            keys_down.remove(pygame.K_SPACE)
+
+    def sleepy(self):
+        now = pygame.time.get_ticks()
+        if now - self.game.sleep_timer > 10000:
+            sleep = pygame.sprite.spritecollideany(self, self.game.sleep)
+            if sleep:
+                if pygame.K_v in keys_down:
+                    self.game.sleep_timer = now
+                    pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 11}))
+                    keys_down.remove(pygame.K_v)
+                
+    def club(self):
+        now = pygame.time.get_ticks()
+        if now - self.game.club_timer > 3000:
+            club = pygame.sprite.spritecollideany(self, self.game.club)
+            if club:
+                if pygame.K_e in keys_down:
+                    self.game.club_timer = now
+                    pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: 13}))
+                    keys_down.remove(pygame.K_e)
+
+    def get_food(self):
+        now = pygame.time.get_ticks()
+        if now - self.game.food_timer > 3000:
+            food = pygame.sprite.spritecollideany(self, self.game.food)
+            if food:
+                if pygame.K_e in keys_down:
+                    self.game.food_timer = now
+                    self.game.inv.slots[4].count += 1
+                    keys_down.remove(pygame.K_e)
                     
 
     def update(self):
         self.move()
         self.take_elevator()
+        self.go_to_class()
+        self.hangwfriends()
+        self.petLili()
+        self.takeExam()
+        self.watchLaLa()
+        self.balcony()
+        self.study()
+        self.walk()
+        self.grab_coffee()
+        self.drink_coffee()
+        self.sleepy()
+        self.club()
 
 
 

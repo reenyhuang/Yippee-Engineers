@@ -16,7 +16,9 @@ class HealthBar():
         pygame.draw.rect(surface, "green", (self.x, self.y, self.w * ratio, self.h))
 
     def decrease(self, num):
-        self.hp -= num
+        if (self.hp-num) >= 0:
+            self.hp -= num
 
     def increase(self, num):
-        self.hp += num
+        if (self.hp+num) <= self.max_hp:
+            self.hp += num

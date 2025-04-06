@@ -1,6 +1,6 @@
 from settings import *
 from map import Map, Camera
-from wall import Wall, Elevator
+from wall import *
 from sprite import sprites, Sprite
 from input import keys_down
 from player import Player
@@ -42,7 +42,26 @@ class Game:
         self.coffee = pygame.sprite.Group()
         self.movie = pygame.sprite.Group()
         self.sleep = pygame.sprite.Group()
+        self.pet = pygame.sprite.Group()
+        self.test = pygame.sprite.Group()
+        self.balcony = pygame.sprite.Group()
+        self.study = pygame.sprite.Group()
+        self.club = pygame.sprite.Group()
+        self.vending = pygame.sprite.Group()
         self.elev_timer = 0
+        self.club_timer = 0
+        self.lili_timer = 0
+        self.test_timer = 0
+        self.coffee_timer = 0
+        self.coffee1_timer = 0
+        self.movie_timer = 0
+        self.friends_timer = 0
+        self.class_timer = 0
+        self.balcony_timer = 0
+        self.walk_timer = 0
+        self.study_timer = 0
+        self.sleep_timer = 0
+        
         self.player = None
         self.lili = None
         self.healthbar = HealthBar(390, 650, 500, 40, 100)
@@ -63,16 +82,46 @@ class Game:
         self.camera = Camera(self.curr_map.width, self.curr_map.height)
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
-        self.lili = Player("RoundLili.png", 8, 10, self)
         
+        player_location = (0, 0)
         for row, tiles in enumerate(self.curr_map.map_data):
             for col, tile_type in enumerate(tiles):
                 if tile_type == '1':
                     Wall(self, col, row)
                 elif tile_type == 'P':
-                    self.player = Player("RoundLili.png", col, row, self)
+                    Tile(self, col, row)
+                    player_location = (col, row)
                 elif tile_type == 'E':
                     Elevator(self, col, row)
+                elif tile_type == 'H':
+                    BalconyH(self, col, row)
+                elif tile_type == 'R':
+                    BalconyV(self, col, row)
+                elif tile_type == 'J':
+                    BalconyJ(self, col, row)
+                elif tile_type == 'K':
+                    BalconyK(self, col, row)
+                elif tile_type == 'T':
+                    Tile(self, col, row)
+                elif tile_type == 'C':
+                    Carpet(self, col, row)
+                elif tile_type == 'c':
+                    Classroom(self, col, row)
+                elif tile_type == 'G':
+                    Grass(self, col, row)
+                elif tile_type == 'D':
+                    Door(self, col, row)
+                elif tile_type == 'S':
+                    Sleep(self, col, row)
+                elif tile_type == 's':
+                    Coffee(self, col, row)
+                elif tile_type == 'V':
+                    VendingMachine(self, col, row)
+
+                
+        
+        self.lili = Player("RoundLili.png", 12, 12, self)
+        self.player = Player("RoundLili.png", player_location[0], player_location[1], self)
 
     def get_clock_time(self):
         '''Return string of in game time: hours:minutes. 6 hr clock, 1 min = 1 sec.'''
@@ -86,7 +135,7 @@ class Game:
         self.start_time = time.time()
         self.running = True
         while self.running:
-            
+            #have a beginning scene
             if self.get_clock_time() == "1:00" and self.custom_event:
                 pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: randint(0, 5)}))
                 self.custom_event = False
@@ -97,6 +146,9 @@ class Game:
                 self.custom_event = False
             if self.get_clock_time() == "0:01":
                 self.custom_event = True
+            if self.healthbar.hp <= 0:
+                self.screen_cap("images/jump.png", "You Died :(")
+                self.quit()
             self.events(self.healthbar) ## Handle events
             self.draw() ## Draw the background map
             self.update() ## Draw all sprites and update them
@@ -175,7 +227,7 @@ class Game:
                     if randint(0, 9):
                         hb.increase(hb.max_hp*.3)
                     else:
-                        hb.decrease(hb.max_hp*.6)
+                        hb.hp = 0
                 elif event_id == 12: #go to balcony
                     hb.increase(hb.max_hp*.1)
                 elif event_id == 13: #go to club meeeting
@@ -219,6 +271,32 @@ class Game:
                     if need_spawn:
                         spawn_x, spawn_y = col, row
                         need_spawn = False
+                elif tile_type == 'H':
+                    BalconyH(self, col, row)
+                elif tile_type == 'R':
+                    BalconyV(self, col, row)
+                elif tile_type == 'J':
+                    BalconyJ(self, col, row)
+                elif tile_type == 'K':
+                    BalconyK(self, col, row)
+                elif tile_type == 'P':
+                    Tile(self, col, row)
+                elif tile_type == 'T':
+                    Tile(self, col, row)
+                elif tile_type == 'C':
+                    Carpet(self, col, row)
+                elif tile_type == 'c':
+                    Classroom(self, col, row)
+                elif tile_type == 'G':
+                    Grass(self, col, row)
+                elif tile_type == 'D':
+                    Door(self, col, row)
+                elif tile_type == 'S':
+                    Sleep(self, col, row)
+                elif tile_type == 's':
+                    Coffee(self, col, row)
+                elif tile_type == 'V':
+                    VendingMachine(self, col, row)
         ## Put Lili on random floors
         if randint(0, 1):
             self.lili = Player("RoundLili.png", 8, 10, self)
@@ -233,10 +311,10 @@ class Game:
         while self.running:
             help_mouse = pygame.mouse.get_pos()
             self.screen.fill("white")
-
-            for 
-                help_txt = font.render(temptxt, True, "Black")
-             temptxt = ["So you're new here then?", 
+            posX = 640
+            posY = 260
+            position = posX, posY
+            temptxt = ["So you're new here then?", 
                        "Use WASD or arrow keys to move", 
                        "Press space to drink coffee", 
                        "Using the elevator: E for up, Q for down",
@@ -245,12 +323,15 @@ class Game:
                        "You can pet Lili the cat with L",
                        "Press E to interact, try it in various spaces around engineering and in classrooms/studyrooms",
                        "An average day for your avatar is 6 hours, 6 minutes in real time"]
-            temptxt = """So you're new here then?"
-            "Use WASD or arrow keys to move
-            Press space to drink coffee\n\nUsing the elevator: E for up, Q for down\n\nHW decreases mental health over time as it accumulates\n\nPay attention to your health bar at the bottom. DON'T DIE!\n\nYou can pet Lili the cat with L\n\nPress E to interact, try it on unique tiles and in classrooms/studyrooms\n\nAn average day for your avatar is 6 hours, 6 minutes in real time"""
-            help_txt = font.render(temptxt, True, "Black")
-            help_rect = help_txt.get_rect(center=(640, 260))
-            self.screen.blit(help_txt, help_rect)
+            label = []
+            for line in temptxt:
+                label.append(font.render(line, True, "Black"))
+            for line in range(len(label)):
+                help_rect = label[line].get_rect(center=(position[0], position[1]))
+                posY += 20
+                position = posX, posY
+                self.screen.blit(label[line], help_rect)
+                
 
             help_bck = Button(image=None, pos=(640, 460), 
                                 text_input="BACK", font=pygame.font.Font(None, 75), base_color="Black", hovering_color="Green")
