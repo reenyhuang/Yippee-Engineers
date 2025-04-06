@@ -233,6 +233,18 @@ class Game:
         while self.running:
             help_mouse = pygame.mouse.get_pos()
             self.screen.fill("white")
+
+            for 
+                help_txt = font.render(temptxt, True, "Black")
+             temptxt = ["So you're new here then?", 
+                       "Use WASD or arrow keys to move", 
+                       "Press space to drink coffee", 
+                       "Using the elevator: E for up, Q for down",
+                       "HW decreases mental health over time as it accumulates",
+                       "Pay attention to your health bar at the bottom. DON'T DIE!",
+                       "You can pet Lili the cat with L",
+                       "Press E to interact, try it in various spaces around engineering and in classrooms/studyrooms",
+                       "An average day for your avatar is 6 hours, 6 minutes in real time"]
             temptxt = """So you're new here then?"
             "Use WASD or arrow keys to move
             Press space to drink coffee\n\nUsing the elevator: E for up, Q for down\n\nHW decreases mental health over time as it accumulates\n\nPay attention to your health bar at the bottom. DON'T DIE!\n\nYou can pet Lili the cat with L\n\nPress E to interact, try it on unique tiles and in classrooms/studyrooms\n\nAn average day for your avatar is 6 hours, 6 minutes in real time"""

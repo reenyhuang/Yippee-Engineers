@@ -3,19 +3,19 @@
 ## Artwork
 
 - [x] Round Lili
-- [ ] Tiles: 32 pixel squares
+- [x] Tiles: 32 pixel squares
 - [ ] Stick People
   - [ ] 4 NPCs to interact with
   - [ ] Main Player
-- [ ] Desks and Chairs
-- [ ] Elevator Tile
-- [ ] Coffee House
-- [ ] Classrooms
+- [x] Desks and Chairs
+- [x] Elevator Tile
+- [x] Coffee House
+- [x] Classrooms
 
 ## Map
 
-- [ ] Tile map for each floor of LEEP
-- [ ] Miscellaneous map stuff
+- [x] Tile map for each floor of LEEP
+- [x] Miscellaneous map stuff
 
 ## Sprites
 
@@ -33,29 +33,29 @@
 ## Health Bar
 
 - [x] Have a health bar
-- [ ] +/- based on time at engineering, events/tasks
+- [x] +/- based on time at engineering, events/tasks
 
 ## Inventory
 
-- [ ] Inventory UI
-- [ ] Able to store and interact with items from the inventory
+- [x] Inventory UI
+- [x] Able to store and interact with items from the inventory
 
 ## Game Screen/UI/Title Screen/End Screen
 
-- [ ] Title screen with game info
+- [x] Title screen with game info
 - [ ] Customizable settings page
 - [ ] Game end screen (only for losing, make it literally impossible to win?)
-- [ ] Help screen
+- [x] Help screen
 
 ## Events/Tasks
 
 - [x] Clock
-- [ ] Get haunted by a professor *
-- [ ] Tests *
-- [ ] Power outage *
+- [x] Get haunted by a professor *
+- [x] Tests *
+- [x] Power outage *
 - [ ] Starvation/Dehydration *
-- [ ] Computer dies *
-- [ ] Lose charger *
+- [x] Computer dies *
+- [x] Lose charger *
 - [ ] Studying *
 - [ ] Hang out with friends *
 - [ ] Go outside (balconey) *
@@ -68,16 +68,12 @@
 - [ ] Go to class (2 times a day for 10 sec/per) *
 - [ ] Do homework *
 - [ ] press key to drink coffee
-- [ ] Cry *
+- [x] Cry *
 - [ ] go nap*
 
-Check list
-- if hw due
-- health
-- 
 ## Screencaps
 
-- [ ] Have screencaps for most events
+- [x] Have screencaps for most events
 
 ## Death Sequence
 
