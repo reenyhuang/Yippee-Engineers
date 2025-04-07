@@ -169,10 +169,8 @@ class Game:
         while self.running:
             #have a beginning scene
             if self.get_clock_time() == "1:00" and self.custom_event:
-                pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: randint(0, 5)}))
                 self.custom_event = False
-            if self.get_clock_time() == "1:32":
-                self.custom_event = True
+                pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: randint(0, 5)}))
             if (self.get_clock_time() == "2:00" or self.get_clock_time() == "3:00") and self.custom_event:
                 self.alert("Go to Class: G415")
                 self.custom_event = True
@@ -184,8 +182,9 @@ class Game:
                     self.alert("You didn't grab food :(  EATT")
                     self.inv.slots[4].count += 1
             if self.get_clock_time() == "4:00" and self.custom_event:
-                pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: randint(0, 5)}))
                 self.custom_event = False
+                pygame.event.post(pygame.event.Event(pygame.USEREVENT, {id: randint(0, 5)}))
+                
             if self.get_clock_time() == "1:01" or self.get_clock_time() == "4:01":
                 self.custom_event = True
             if self.get_clock_time() == "0:05" and self.custom_event:
@@ -321,6 +320,7 @@ class Game:
                     keys_down.remove(event.key)
             elif event.type == pygame.USEREVENT:
                 event_id = event.dict[id]
+                self.custom_event = True
                 if event_id == 0: # haunted by professor
                     self.screen_cap("angry_professor.png", "Haunted by Professor: -60 HP")
                     hb.decrease(hb.max_hp*.6)
