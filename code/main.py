@@ -250,7 +250,7 @@ class Game:
                        "An average day for your avatar is 6 hours, 6 minutes in real time",
                        "Make sure to explore, there is a secret way to win. Good Luck!"]
 
-        posX, posY = 640, 150
+        posX, posY = 640, 100
         for line in lines:
             label = font.render(line, True, "Black")
             rect = label.get_rect(center=(posX, posY))
@@ -524,10 +524,10 @@ class Game:
                 label.append(font.render(line, True, "Black"))
             for line in range(len(label)):
                 help_rect = label[line].get_rect(center=(position[0], position[1]))
-                posY += 50
+                posY += 29
                 position = posX, posY
                 self.screen.blit(label[line], help_rect)
-            help_bck = Button(image=None, pos=(640, 460), 
+            help_bck = Button(image=None, pos=(80, 650), 
                                 text_input="BACK", font=pygame.font.Font(None, 75), base_color="Black", hovering_color="Green")
 
             help_bck.changeColor(help_mouse)
@@ -553,13 +553,14 @@ class Game:
             temptxt = ["You're an engineering student at KU", 
                        "Experience the daily life of an engineer!", 
                        "There are 6 hours in a day, try to survive",
-                       "This game is intended for you to build healthier habits as an engineeering student" 
-                       "Use WASD to explore, E for any 'educational' interaction, V for others, P to pet Lili",
-                       "To use elevator, go in the black box and use E to go up a floor and Q to go down"
+                       "This game is intended for you to build healthier habits as an engineeering student",
+                       "Use WASD to explore",
+                        "E for any 'educational' interaction, V for others, P to pet Lili",
+                       "To use elevator, go in the black box and use E to go up a floor and Q to go down",
                        "HW decreases mental health each day as it accumulates",
-                       "There are many tasks you can do to increase your mental health"
+                       "There are many tasks you can do to increase your mental health",
                        "Pay attention to your health bar at the bottom. DON'T DIE!",
-                       "There will be spontaneous events :)"
+                       "There will be spontaneous events :)",
                        "Press 'h' for more detailed information"]
             label = []
             for line in temptxt:
@@ -570,7 +571,7 @@ class Game:
                 position = posX, posY
                 self.screen.blit(label[line], help_rect)
                 
-            help_bck = Button(image=None, pos=(640, 460), 
+            help_bck = Button(image=None, pos=(640, 600), 
                                 text_input="Let's Go", font=pygame.font.Font(None, 75), base_color="Black", hovering_color="Red")
             help_bck.changeColor(mouse)
             help_bck.update(self.screen)
