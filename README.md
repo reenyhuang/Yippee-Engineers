@@ -1,6 +1,11 @@
 # To Do List
 
-- [x] Add the NPCs and change main character
+## Post HackKU
+
+- [ ] Balancing: Currently wayyy too easy to survive
+- [ ] Bug report: Upon receiving the alert for not eating, pizza count increases by 1
+- [ ] Customizable settings: Lili spin speed, number of Lilis, idk what else
+- [ ] Messages for all events would probably help make it clear what you're doing
 
 ## Artwork
 
